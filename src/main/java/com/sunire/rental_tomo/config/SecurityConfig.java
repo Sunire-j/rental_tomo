@@ -46,6 +46,7 @@ public class SecurityConfig {
                                 ,"/login","/join/**",
                                         "/image/**").permitAll()
                                 .requestMatchers(HttpMethod.POST,"/api/v1/reviews/write").authenticated()
+                                .requestMatchers(HttpMethod.GET, "/api/v1/users/nickname", "/api/v1/users/getId").authenticated()
                 )
                 .sessionManagement(config->config.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(new JwtFilter(userService, secretKey), UsernamePasswordAuthenticationFilter.class)

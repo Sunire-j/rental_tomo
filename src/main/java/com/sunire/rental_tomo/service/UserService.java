@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -20,7 +22,8 @@ public class UserService {
 
     @Value("${jwt.token.secret}")
     private String key;
-    private final Long expireTimeMs = 1000*60* 60L;
+    private final Long expireTimeMs = 1000*60* 60L;//60분
+    private final Long expireTimeMs_Refresh = 1000*60* 60 * 24 * 7L;//7일
 
     public String join(UserJoinRequest userJoinRequest) {
 
@@ -58,7 +61,7 @@ public class UserService {
         return "success";
     }
 
-    public String login(UserJoinRequest userJoinRequest) {
+    public Map<String, String> login(UserJoinRequest userJoinRequest) {
         //username X
         User user = userRepository.findByUserid(userJoinRequest.getUserid())
                 .orElseThrow(()->new AppException(ErrorCode.USERNAME_NOT_FOUND, userJoinRequest.getUserid() +"이 없습니다."));
@@ -71,6 +74,28 @@ public class UserService {
         //generate token and return
 
         System.out.println("key is " +key);
-        return JwtTokenUtil.createToken(user.getUserid(), key,expireTimeMs);
+        return JwtTokenUtil.createToken(user.getUserid(), key,expireTimeMs, expireTimeMs_Refresh);
+    }
+
+    public String nickname(String token) {
+        if (token == null || !token.startsWith("Bearer ")) {
+            throw new AppException(ErrorCode.TOKEN_NOT_FOUND, "토큰이 유효하지 않거나, 존재하지 않습니다.");
+        }
+
+        String token_temp = token.substring(7);
+        String userid = JwtTokenUtil.getUserid(token_temp, key);
+
+        return userRepository.findByUserid(userid)
+                .map(user -> user.getNickname())
+                .orElseThrow(() -> new AppException(ErrorCode.USERNAME_NOT_FOUND, "사용자를 찾을 수 없습니다."));
+    }
+
+    public String getId(String token) {
+        if (token == null || !token.startsWith("Bearer ")) {
+            throw new AppException(ErrorCode.TOKEN_NOT_FOUND, "토큰이 유효하지 않거나, 존재하지 않습니다.");
+        }
+
+        String token_temp = token.substring(7);
+        return JwtTokenUtil.getUserid(token_temp, key);
     }
 }
