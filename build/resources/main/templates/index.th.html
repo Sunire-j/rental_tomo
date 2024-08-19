@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="/js/jquery-3.7.1.min.js"></script>
+    <script src="/js/jwtheader.js"></script>
+<!--    <script src="/js/bootstrap.bundle.min.js"></script>-->
+<!--    <link rel="stylesheet" href="/css/bootstrap.min.css"/>-->
+    <link rel="stylesheet" href="/css/pico.fuchsia.min.css"/>
+    <meta name="authToken" content="">
+</head>
+<body>
+<main class="container">
+    <div th:replace="reusable/header.html::header"></div>
+    <p>개발용 페이지</p>
+
+    <form id="loginForm" method="post" action="/api/v1/users/login">
+        <input type="text" name="userid" placeholder="아이디" required/>
+        <input type="password" name="password" placeholder="비밀번호" required/>
+        <input type="submit" value="로그인"/>
+    </form>
+
+    <form id="need_authForm" method="post" action="/api/v1/reviews/write">
+        <input type="submit" value="헤더필요한 post"/>
+    </form>
+
+    <script>
+        document.getElementById("loginForm").onsubmit = function (event) {
+            event.preventDefault(); // 기본 폼 제출 방지
+            const formData = new FormData(this);
+            const jsonData = {};
+
+            // FormData를 JSON으로 변환
+            formData.forEach((value, key) => {
+                jsonData[key] = value;
+            });
+
+            fetch("/api/v1/users/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(jsonData)
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("로그인 실패");
+                    }
+                    return response.text(); // 응답을 텍스트로 처리
+                })
+                .then(token => {
+                    localStorage.setItem("authToken", "Bearer " + token); // token 로컬 스토리지에 저장
+                    alert("로그인 성공: " + token);
+                    location.reload(); // 페이지 새로 고침
+                })
+                .catch(error => {
+                    alert("로그인 실패, 사유 :" + error.message);
+                });
+        };
+
+        document.getElementById("need_authForm").onsubmit = function (event) {
+            event.preventDefault(); // 기본 폼 제출 방지
+            const token = localStorage.getItem("authToken");
+
+            fetch("/api/v1/reviews/write", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": token
+                },
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("리뷰등록 실패");
+                    }
+                    return response.text(); // 응답을 텍스트로 처리
+                })
+                .then(text => {
+                    alert(text);
+                    location.reload(); // 페이지 새로 고침
+                })
+                .catch(error => {
+                    alert("등록실패 :" + error.message);
+                });
+        };
+    </script>
+</main>
+</body>
+</html>

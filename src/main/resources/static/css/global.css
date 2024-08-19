@@ -1,0 +1,27 @@
+.link {
+    display: flex; /* flexbox를 사용하여 중앙 정렬을 쉽게 함 */
+    justify-content: center; /* 수평 중앙 정렬 */
+    align-items: center; /* 수직 중앙 정렬 */
+    width: 100%; /* 각 링크가 div의 전체 너비를 차지하도록 설정 */
+}
+
+.link > p {
+    cursor: pointer;
+    width: fit-content; /* 내용에 맞는 너비 */
+    text-align: center; /* 텍스트 중앙 정렬 */
+}
+.tnc{
+    margin-top: 50px;
+    margin-bottom: 30px;
+    height: 400px;
+    overflow: auto;
+    border : 1.2px solid #f86cc0;
+    padding : 50px;
+}
+.tnc_agree{
+    margin-bottom: 50px;
+}
+
+.all_agree{
+    margin-bottom: 100px;
+}

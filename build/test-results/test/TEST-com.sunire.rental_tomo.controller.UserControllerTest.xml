@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.sunire.rental_tomo.controller.UserControllerTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2024-07-20T20:58:31" hostname="DESKTOP-MQCE7C1" time="0.408">
+  <properties/>
+  <testcase name="로그인 성공" classname="com.sunire.rental_tomo.controller.UserControllerTest" time="0.331"/>
+  <testcase name="아이디 중복" classname="com.sunire.rental_tomo.controller.UserControllerTest" time="0.026"/>
+  <testcase name="회원가입 성공" classname="com.sunire.rental_tomo.controller.UserControllerTest" time="0.01"/>
+  <testcase name="로그인 실패, 아이디 X" classname="com.sunire.rental_tomo.controller.UserControllerTest" time="0.012"/>
+  <testcase name="로그인 실패, 비밀번호X" classname="com.sunire.rental_tomo.controller.UserControllerTest" time="0.021"/>
+  <system-out><![CDATA[05:58:26.588 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.sunire.rental_tomo.controller.UserControllerTest]: UserControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+05:58:26.749 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.sunire.rental_tomo.RentalTomoApplication for test class com.sunire.rental_tomo.controller.UserControllerTest
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.3.2)
+
+2024-07-21T05:58:27.117+09:00  INFO 53264 --- [rental_tomo] [    Test worker] c.s.r.controller.UserControllerTest      : Starting UserControllerTest using Java 17.0.9 with PID 53264 (started by kasti in E:\rental_tomo)
+2024-07-21T05:58:27.120+09:00  INFO 53264 --- [rental_tomo] [    Test worker] c.s.r.controller.UserControllerTest      : No active profile set, falling back to 1 default profile: "default"
+2024-07-21T05:58:30.328+09:00  WARN 53264 --- [rental_tomo] [    Test worker] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: d07d0d9f-03e5-4026-9ce0-0710776d8556
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2024-07-21T05:58:30.414+09:00  INFO 53264 --- [rental_tomo] [    Test worker] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2024-07-21T05:58:30.790+09:00 DEBUG 53264 --- [rental_tomo] [    Test worker] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with filters: DisableEncodeUrlFilter, WebAsyncManagerIntegrationFilter, SecurityContextHolderFilter, HeaderWriterFilter, CorsFilter, CsrfFilter, LogoutFilter, UsernamePasswordAuthenticationFilter, DefaultLoginPageGeneratingFilter, DefaultLogoutPageGeneratingFilter, BasicAuthenticationFilter, RequestCacheAwareFilter, SecurityContextHolderAwareRequestFilter, AnonymousAuthenticationFilter, ExceptionTranslationFilter, AuthorizationFilter
+2024-07-21T05:58:30.969+09:00  INFO 53264 --- [rental_tomo] [    Test worker] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2024-07-21T05:58:30.969+09:00  INFO 53264 --- [rental_tomo] [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2024-07-21T05:58:30.971+09:00  INFO 53264 --- [rental_tomo] [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 2 ms
+2024-07-21T05:58:31.045+09:00  INFO 53264 --- [rental_tomo] [    Test worker] c.s.r.controller.UserControllerTest      : Started UserControllerTest in 4.212 seconds (process running for 5.535)
+2024-07-21T05:58:31.193+09:00 DEBUG 53264 --- [rental_tomo] [    Test worker] w.c.HttpSessionSecurityContextRepository : Created HttpSession as SecurityContext is non-default
+2024-07-21T05:58:31.193+09:00 DEBUG 53264 --- [rental_tomo] [    Test worker] w.c.HttpSessionSecurityContextRepository : Stored SecurityContextImpl [Authentication=UsernamePasswordAuthenticationToken [Principal=org.springframework.security.core.userdetails.User [Username=user, Password=[PROTECTED], Enabled=true, AccountNonExpired=true, CredentialsNonExpired=true, AccountNonLocked=true, Granted Authorities=[ROLE_USER]], Credentials=[PROTECTED], Authenticated=true, Details=null, Granted Authorities=[ROLE_USER]]] to HttpSession [org.springframework.mock.web.MockHttpSession@55fe9c2f]
+2024-07-21T05:58:31.219+09:00 DEBUG 53264 --- [rental_tomo] [    Test worker] o.s.security.web.FilterChainProxy        : Securing POST /api/v1/users/login
+2024-07-21T05:58:31.243+09:00 DEBUG 53264 --- [rental_tomo] [    Test worker] w.c.HttpSessionSecurityContextRepository : Retrieved SecurityContextImpl [Authentication=UsernamePasswordAuthenticationToken [Principal=org.springframework.security.core.userdetails.User [Username=user, Password=[PROTECTED], Enabled=true, AccountNonExpired=true, CredentialsNonExpired=true, AccountNonLocked=true, Granted Authorities=[ROLE_USER]], Credentials=[PROTECTED], Authenticated=true, Details=null, Granted Authorities=[ROLE_USER]]]
+2024-07-21T05:58:31.245+09:00 DEBUG 53264 --- [rental_tomo] [    Test worker] o.s.security.web.FilterChainProxy        : Secured POST /api/v1/users/login
+
+MockHttpServletRequest:
+      HTTP Method = POST
+      Request URI = /api/v1/users/login
+       Parameters = {_csrf=[_hw5iD5QkNwvDjusiaOpg6ukNNvvvbmv-DnsC2Y4yZiv4cLqnX9buA5i8-gCbwKcvI6d5Z2WGeOKjI-CnVjZagVd-qmd2abe]}
+          Headers = [Content-Type:"application/json;charset=UTF-8", Content-Length:"39"]
+             Body = {"userid":"test","password":"1q2w3e4r"}
+    Session Attrs = {SPRING_SECURITY_CONTEXT=SecurityContextImpl [Authentication=UsernamePasswordAuthenticationToken [Principal=org.springframework.security.core.userdetails.User [Username=user, Password=[PROTECTED], Enabled=true, AccountNonExpired=true, CredentialsNonExpired=true, AccountNonLocked=true, Granted Authorities=[ROLE_USER]], Credentials=[PROTECTED], Authenticated=true, Details=null, Granted Authorities=[ROLE_USER]]]}
+
+Handler:
+             Type = com.sunire.rental_tomo.controller.UserController
+           Method = com.sunire.rental_tomo.controller.UserController#login(UserJoinRequest)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = null
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 200
+    Error message = null
+          Headers = [Vary:"Origin", "Access-Control-Request-Method", "Access-Control-Request-Headers", Content-Type:"text/plain;charset=UTF-8", Content-Length:"5", X-Content-Type-Options:"nosniff", X-XSS-Protection:"0", Cache-Control:"no-cache, no-store, max-age=0, must-revalidate", Pragma:"no-cache", Expires:"0", X-Frame-Options:"DENY"]
+     Content type = text/plain;charset=UTF-8
+             Body = token
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+2024-07-21T05:58:31.413+09:00 DEBUG 53264 --- [rental_tomo] [    Test worker] w.c.HttpSessionSecurityContextRepository : Created HttpSession as SecurityContext is non-default
+2024-07-21T05:58:31.413+09:00 DEBUG 53264 --- [rental_tomo] [    Test worker] w.c.HttpSessionSecurityContextRepository : Stored SecurityContextImpl [Authentication=UsernamePasswordAuthenticationToken [Principal=org.springframework.security.core.userdetails.User [Username=user, Password=[PROTECTED], Enabled=true, AccountNonExpired=true, CredentialsNonExpired=true, AccountNonLocked=true, Granted Authorities=[ROLE_USER]], Credentials=[PROTECTED], Authenticated=true, Details=null, Granted Authorities=[ROLE_USER]]] to HttpSession [org.springframework.mock.web.MockHttpSession@6e66b498]
+2024-07-21T05:58:31.415+09:00 DEBUG 53264 --- [rental_tomo] [    Test worker] o.s.security.web.FilterChainProxy        : Securing POST /api/v1/users/join
+2024-07-21T05:58:31.415+09:00 DEBUG 53264 --- [rental_tomo] [    Test worker] w.c.HttpSessionSecurityContextRepository : Retrieved SecurityContextImpl [Authentication=UsernamePasswordAuthenticationToken [Principal=org.springframework.security.core.userdetails.User [Username=user, Password=[PROTECTED], Enabled=true, AccountNonExpired=true, CredentialsNonExpired=true, AccountNonLocked=true, Granted Authorities=[ROLE_USER]], Credentials=[PROTECTED], Authenticated=true, Details=null, Granted Authorities=[ROLE_USER]]]
+2024-07-21T05:58:31.416+09:00 DEBUG 53264 --- [rental_tomo] [    Test worker] o.s.security.web.FilterChainProxy        : Secured POST /api/v1/users/join
+
+MockHttpServletRequest:
+      HTTP Method = POST
+      Request URI = /api/v1/users/join
+       Parameters = {_csrf=[yQ8QlpPkdwcCYBE7oSCVv5dU9ZIvjzrga3qjOsOmf5rGJ8XR-2sppqaGEzQvA3UKlg2hjaY22KocuwvNWxjADPCXSKjxEPK0]}
+          Headers = [Content-Type:"application/json;charset=UTF-8", Content-Length:"49"]
+             Body = {"id":null,"userid":"test","password":"1q2w3e4r"}
+    Session Attrs = {SPRING_SECURITY_CONTEXT=SecurityContextImpl [Authentication=UsernamePasswordAuthenticationToken [Principal=org.springframework.security.core.userdetails.User [Username=user, Password=[PROTECTED], Enabled=true, AccountNonExpired=true, CredentialsNonExpired=true, AccountNonLocked=true, Granted Authorities=[ROLE_USER]], Credentials=[PROTECTED], Authenticated=true, Details=null, Granted Authorities=[ROLE_USER]]]}
+
+Handler:
+             Type = com.sunire.rental_tomo.controller.UserController
+           Method = com.sunire.rental_tomo.controller.UserController#join(UserJoinRequest)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = com.sunire.rental_tomo.exception.AppException
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 409
+    Error message = null
+          Headers = [Vary:"Origin", "Access-Control-Request-Method", "Access-Control-Request-Headers", Content-Type:"text/plain;charset=UTF-8", Content-Length:"26", X-Content-Type-Options:"nosniff", X-XSS-Protection:"0", Cache-Control:"no-cache, no-store, max-age=0, must-revalidate", Pragma:"no-cache", Expires:"0", X-Frame-Options:"DENY"]
+     Content type = text/plain;charset=UTF-8
+             Body = USERNAME_DUPLICATED 중복
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+2024-07-21T05:58:31.435+09:00 DEBUG 53264 --- [rental_tomo] [    Test worker] w.c.HttpSessionSecurityContextRepository : Created HttpSession as SecurityContext is non-default
+2024-07-21T05:58:31.435+09:00 DEBUG 53264 --- [rental_tomo] [    Test worker] w.c.HttpSessionSecurityContextRepository : Stored SecurityContextImpl [Authentication=UsernamePasswordAuthenticationToken [Principal=org.springframework.security.core.userdetails.User [Username=user, Password=[PROTECTED], Enabled=true, AccountNonExpired=true, CredentialsNonExpired=true, AccountNonLocked=true, Granted Authorities=[ROLE_USER]], Credentials=[PROTECTED], Authenticated=true, Details=null, Granted Authorities=[ROLE_USER]]] to HttpSession [org.springframework.mock.web.MockHttpSession@5db04bd2]
+2024-07-21T05:58:31.436+09:00 DEBUG 53264 --- [rental_tomo] [    Test worker] o.s.security.web.FilterChainProxy        : Securing POST /api/v1/users/join
+2024-07-21T05:58:31.437+09:00 DEBUG 53264 --- [rental_tomo] [    Test worker] w.c.HttpSessionSecurityContextRepository : Retrieved SecurityContextImpl [Authentication=UsernamePasswordAuthenticationToken [Principal=org.springframework.security.core.userdetails.User [Username=user, Password=[PROTECTED], Enabled=true, AccountNonExpired=true, CredentialsNonExpired=true, AccountNonLocked=true, Granted Authorities=[ROLE_USER]], Credentials=[PROTECTED], Authenticated=true, Details=null, Granted Authorities=[ROLE_USER]]]
+2024-07-21T05:58:31.437+09:00 DEBUG 53264 --- [rental_tomo] [    Test worker] o.s.security.web.FilterChainProxy        : Secured POST /api/v1/users/join
+
+MockHttpServletRequest:
+      HTTP Method = POST
+      Request URI = /api/v1/users/join
+       Parameters = {_csrf=[bjv5HzTAmp4Jg0VbZMnDdfYSUDhm6aQ4t3h7jPk9p8rPcoTHWljPfAXwr_gktXM4UuT3RpQqfVpT35QV1ExM7skOnv-qFrWk]}
+          Headers = [Content-Type:"application/json;charset=UTF-8", Content-Length:"49"]
+             Body = {"id":null,"userid":"test","password":"1q2w3e4r"}
+    Session Attrs = {SPRING_SECURITY_CONTEXT=SecurityContextImpl [Authentication=UsernamePasswordAuthenticationToken [Principal=org.springframework.security.core.userdetails.User [Username=user, Password=[PROTECTED], Enabled=true, AccountNonExpired=true, CredentialsNonExpired=true, AccountNonLocked=true, Granted Authorities=[ROLE_USER]], Credentials=[PROTECTED], Authenticated=true, Details=null, Granted Authorities=[ROLE_USER]]]}
+
+Handler:
+             Type = com.sunire.rental_tomo.controller.UserController
+           Method = com.sunire.rental_tomo.controller.UserController#join(UserJoinRequest)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = null
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 200
+    Error message = null
+          Headers = [Vary:"Origin", "Access-Control-Request-Method", "Access-Control-Request-Headers", Content-Type:"text/plain;charset=UTF-8", Content-Length:"24", X-Content-Type-Options:"nosniff", X-XSS-Protection:"0", Cache-Control:"no-cache, no-store, max-age=0, must-revalidate", Pragma:"no-cache", Expires:"0", X-Frame-Options:"DENY"]
+     Content type = text/plain;charset=UTF-8
+             Body = User joined successfully
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+2024-07-21T05:58:31.448+09:00 DEBUG 53264 --- [rental_tomo] [    Test worker] w.c.HttpSessionSecurityContextRepository : Created HttpSession as SecurityContext is non-default
+2024-07-21T05:58:31.448+09:00 DEBUG 53264 --- [rental_tomo] [    Test worker] w.c.HttpSessionSecurityContextRepository : Stored SecurityContextImpl [Authentication=UsernamePasswordAuthenticationToken [Principal=org.springframework.security.core.userdetails.User [Username=user, Password=[PROTECTED], Enabled=true, AccountNonExpired=true, CredentialsNonExpired=true, AccountNonLocked=true, Granted Authorities=[ROLE_USER]], Credentials=[PROTECTED], Authenticated=true, Details=null, Granted Authorities=[ROLE_USER]]] to HttpSession [org.springframework.mock.web.MockHttpSession@2d2133fd]
+2024-07-21T05:58:31.449+09:00 DEBUG 53264 --- [rental_tomo] [    Test worker] o.s.security.web.FilterChainProxy        : Securing POST /api/v1/users/login
+2024-07-21T05:58:31.449+09:00 DEBUG 53264 --- [rental_tomo] [    Test worker] w.c.HttpSessionSecurityContextRepository : Retrieved SecurityContextImpl [Authentication=UsernamePasswordAuthenticationToken [Principal=org.springframework.security.core.userdetails.User [Username=user, Password=[PROTECTED], Enabled=true, AccountNonExpired=true, CredentialsNonExpired=true, AccountNonLocked=true, Granted Authorities=[ROLE_USER]], Credentials=[PROTECTED], Authenticated=true, Details=null, Granted Authorities=[ROLE_USER]]]
+2024-07-21T05:58:31.449+09:00 DEBUG 53264 --- [rental_tomo] [    Test worker] o.s.security.web.FilterChainProxy        : Secured POST /api/v1/users/login
+
+MockHttpServletRequest:
+      HTTP Method = POST
+      Request URI = /api/v1/users/login
+       Parameters = {_csrf=[ZdJYb8a0DmPcG2DOKmhyVNZxd238pHWQK105HbKTqWaJ-HvTVOtpW6WEO1XxLwL3H0VGYeAUWgzLx0O9GmVbeIDwmVK_zR_m]}
+          Headers = [Content-Type:"application/json;charset=UTF-8", Content-Length:"39"]
+             Body = {"userid":"test","password":"1q2w3e4r"}
+    Session Attrs = {SPRING_SECURITY_CONTEXT=SecurityContextImpl [Authentication=UsernamePasswordAuthenticationToken [Principal=org.springframework.security.core.userdetails.User [Username=user, Password=[PROTECTED], Enabled=true, AccountNonExpired=true, CredentialsNonExpired=true, AccountNonLocked=true, Granted Authorities=[ROLE_USER]], Credentials=[PROTECTED], Authenticated=true, Details=null, Granted Authorities=[ROLE_USER]]]}
+
+Handler:
+             Type = com.sunire.rental_tomo.controller.UserController
+           Method = com.sunire.rental_tomo.controller.UserController#login(UserJoinRequest)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = com.sunire.rental_tomo.exception.AppException
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 404
+    Error message = null
+          Headers = [Vary:"Origin", "Access-Control-Request-Method", "Access-Control-Request-Headers", Content-Type:"text/plain;charset=UTF-8", Content-Length:"19", X-Content-Type-Options:"nosniff", X-XSS-Protection:"0", Cache-Control:"no-cache, no-store, max-age=0, must-revalidate", Pragma:"no-cache", Expires:"0", X-Frame-Options:"DENY"]
+     Content type = text/plain;charset=UTF-8
+             Body = USERNAME_NOT_FOUND 
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+2024-07-21T05:58:31.461+09:00 DEBUG 53264 --- [rental_tomo] [    Test worker] w.c.HttpSessionSecurityContextRepository : Did not store anonymous SecurityContext
+2024-07-21T05:58:31.463+09:00 DEBUG 53264 --- [rental_tomo] [    Test worker] o.s.security.web.FilterChainProxy        : Securing POST /api/v1/users/login
+2024-07-21T05:58:31.473+09:00 DEBUG 53264 --- [rental_tomo] [    Test worker] s.w.a.DelegatingAuthenticationEntryPoint : Trying to match using And [Not [RequestHeaderRequestMatcher [expectedHeaderName=X-Requested-With, expectedHeaderValue=XMLHttpRequest]], MediaTypeRequestMatcher [contentNegotiationStrategy=org.springframework.web.accept.ContentNegotiationManager@18c820d2, matchingMediaTypes=[application/xhtml+xml, image/*, text/html, text/plain], useEquals=false, ignoredMediaTypes=[*/*]]]
+2024-07-21T05:58:31.474+09:00 DEBUG 53264 --- [rental_tomo] [    Test worker] s.w.a.DelegatingAuthenticationEntryPoint : Trying to match using Or [RequestHeaderRequestMatcher [expectedHeaderName=X-Requested-With, expectedHeaderValue=XMLHttpRequest], And [Not [MediaTypeRequestMatcher [contentNegotiationStrategy=org.springframework.web.accept.ContentNegotiationManager@18c820d2, matchingMediaTypes=[text/html], useEquals=false, ignoredMediaTypes=[]]], MediaTypeRequestMatcher [contentNegotiationStrategy=org.springframework.web.accept.ContentNegotiationManager@18c820d2, matchingMediaTypes=[application/atom+xml, application/x-www-form-urlencoded, application/json, application/octet-stream, application/xml, multipart/form-data, text/xml], useEquals=false, ignoredMediaTypes=[*/*]]], MediaTypeRequestMatcher [contentNegotiationStrategy=org.springframework.web.accept.ContentNegotiationManager@18c820d2, matchingMediaTypes=[*/*], useEquals=true, ignoredMediaTypes=[]]]
+2024-07-21T05:58:31.474+09:00 DEBUG 53264 --- [rental_tomo] [    Test worker] s.w.a.DelegatingAuthenticationEntryPoint : Match found! Executing org.springframework.security.web.authentication.DelegatingAuthenticationEntryPoint@35a9e665
+2024-07-21T05:58:31.475+09:00 DEBUG 53264 --- [rental_tomo] [    Test worker] s.w.a.DelegatingAuthenticationEntryPoint : Trying to match using RequestHeaderRequestMatcher [expectedHeaderName=X-Requested-With, expectedHeaderValue=XMLHttpRequest]
+2024-07-21T05:58:31.475+09:00 DEBUG 53264 --- [rental_tomo] [    Test worker] s.w.a.DelegatingAuthenticationEntryPoint : No match found. Using default entry point org.springframework.security.web.authentication.www.BasicAuthenticationEntryPoint@418d1c03
+
+MockHttpServletRequest:
+      HTTP Method = POST
+      Request URI = /api/v1/users/login
+       Parameters = {_csrf=[lLzwSZqI0si86M-Z6xJ_3kmu56B6WSUI1qkhMsvDyMixeCCKpoXBLfuw6v6R3q2pij9L6X7KypgYYBIl4MhABfz6_fvUGRDu]}
+          Headers = [Content-Type:"application/json;charset=UTF-8", Content-Length:"39"]
+             Body = {"userid":"test","password":"1q2w3e4r"}
+    Session Attrs = {}
+
+Handler:
+             Type = null
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = null
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 401
+    Error message = Unauthorized
+          Headers = [Vary:"Origin", "Access-Control-Request-Method", "Access-Control-Request-Headers", WWW-Authenticate:"Basic realm="Realm"", X-Content-Type-Options:"nosniff", X-XSS-Protection:"0", Cache-Control:"no-cache, no-store, max-age=0, must-revalidate", Pragma:"no-cache", Expires:"0", X-Frame-Options:"DENY"]
+     Content type = null
+             Body = 
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

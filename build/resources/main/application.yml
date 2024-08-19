@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: rental_tomo
+
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PW}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+  thymeleaf:
+    cache: false
+
+jwt:
+  token:
+    secret: ${JWT_SECRET}
+
+logging:
+  level:
+    org.springframework.security: DEBUG

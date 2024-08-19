@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="/js/jquery-3.7.1.min.js"></script>
+    <script src="/js/jwtheader.js"></script>
+    <link rel="stylesheet" href="/css/pico.fuchsia.min.css"/>
+    <link rel="stylesheet" href="/css/global.css"/>
+    <meta name="authToken" content="">
+    <script src="/js/user.js"></script>
+    <title>Title</title>
+</head>
+<body>
+<main class="container">
+    <div th:replace="reusable/header.html::header"></div>
+    <!--  정보 입력 시작-->
+    <!--db의 컬럼은 아이디, 비밀번호, 닉네임, 폰번호, 성별, 생일정도-->
+    <!--  유효성검사는 빼고 입력만 받도록 하기-->
+    <!--  passwordre는 json에서 삭제가능. formdata객체에서 .delete(필드명)-->
+
+    <h1>회원정보입력</h1>
+
+  <form method="post" id="join_form" action="/api/v1/users/join">
+    <div class="grid">
+        <input type="text" name="userid" placeholder="아이디" aria-label="아이디">
+        <input type="password" name="password" placeholder="비밀번호" aria-label="비밀번호">
+        <input type="password" name="passwordre" placeholder="비밀번호확인" aria-label="비밀번호확인">
+    </div>
+    <div>
+        <input type="email" name="email" placeholder="이메일" aria-label="이메일"/>
+    </div>
+      <div>
+          <input type="text" name="nickname" placeholder="닉네임" aria-label="닉네임"/>
+      </div>
+    <div>
+        <input type="tel" name="phonenum" placeholder="휴대폰번호" aria-label="휴대폰번호"/>
+    </div>
+    <div class="grid">
+        <div class="birth">
+            <label htmlfor="birth">생일</label>
+            <input type="date" name="birth" aria-label="생일">
+        </div>
+        <fieldset>
+            <legend>성별</legend>
+            <input type="radio" name="sex" value="M" checked/>
+            <label htmlFor="m">남성</label>
+            <input type="radio" name="sex" value="F"/>
+            <label htmlFor="f">여성</label>
+        </fieldset>
+    </div>
+
+    <input type="submit" value="회원가입"/>
+
+  </form>
+
+</main>
+
+</body>
+</html>

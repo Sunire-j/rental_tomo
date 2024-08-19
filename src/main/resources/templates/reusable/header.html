@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="/js/jquery-3.7.1.min.js"></script>
+    <script src="/js/jwtheader.js"></script>
+    <link rel="stylesheet" href="/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/css/pico.fuchsia.min.css"/>
+    <meta name="authToken" content="">
+    <title>Title</title>
+</head>
+<body>
+<header th:fragment="header">
+    <nav>
+        <ul>
+            <li><strong>Rental Tomo / 렌탈 친구</strong></li>
+        </ul>
+        <ul>
+            <li><a href="#">홈</a></li>
+            <li><a href="#">이용안내</a></li>
+            <li><a href="/">개발용페이지</a></li>
+            <li><button class="secondary" onclick="location.href='/login'">로그인/회원가입</button></li>
+        </ul>
+    </nav>
+</header>
+</body>
+</html>
