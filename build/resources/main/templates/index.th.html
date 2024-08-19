@@ -5,8 +5,8 @@
     <title>Title</title>
     <script src="/js/jquery-3.7.1.min.js"></script>
     <script src="/js/jwtheader.js"></script>
-<!--    <script src="/js/bootstrap.bundle.min.js"></script>-->
-<!--    <link rel="stylesheet" href="/css/bootstrap.min.css"/>-->
+    <!--    <script src="/js/bootstrap.bundle.min.js"></script>-->
+    <!--    <link rel="stylesheet" href="/css/bootstrap.min.css"/>-->
     <link rel="stylesheet" href="/css/pico.fuchsia.min.css"/>
     <meta name="authToken" content="">
 </head>
@@ -15,76 +15,103 @@
     <div th:replace="reusable/header.html::header"></div>
     <p>개발용 페이지</p>
 
-    <form id="loginForm" method="post" action="/api/v1/users/login">
-        <input type="text" name="userid" placeholder="아이디" required/>
-        <input type="password" name="password" placeholder="비밀번호" required/>
-        <input type="submit" value="로그인"/>
-    </form>
+    <div>
+        <h2>엑세스 토큰:</h2>
+        <pre id="accessTokenDisplay"></pre>
+
+        <h2>리프레시 토큰:</h2>
+        <pre id="refreshTokenDisplay"></pre>
+
+        <div class="grid">
+            <div>
+                <h2>유저 아이디:</h2>
+                <pre id="userIdDisplay">로딩 중...</pre>
+            </div>
+            <div>
+                <h2>유저 닉네임:</h2>
+                <pre id="userNicknameDisplay">로딩 중...</pre>
+            </div>
+        </div>
+    </div>
 
     <form id="need_authForm" method="post" action="/api/v1/reviews/write">
         <input type="submit" value="헤더필요한 post"/>
     </form>
 
     <script>
-        document.getElementById("loginForm").onsubmit = function (event) {
-            event.preventDefault(); // 기본 폼 제출 방지
-            const formData = new FormData(this);
-            const jsonData = {};
+        // 로컬 스토리지에서 토큰 가져오기
+        const accessToken = localStorage.getItem("accessToken");
+        const refreshToken = localStorage.getItem("refreshToken");
 
-            // FormData를 JSON으로 변환
-            formData.forEach((value, key) => {
-                jsonData[key] = value;
-            });
+        // 페이지에 토큰 표시하기
+        document.getElementById("accessTokenDisplay").textContent = accessToken ? accessToken : "엑세스 토큰이 없습니다.";
+        document.getElementById("refreshTokenDisplay").textContent = refreshToken ? refreshToken : "리프레시 토큰이 없습니다.";
 
-            fetch("/api/v1/users/login", {
-                method: "POST",
+        if (accessToken) {
+            fetch("/api/v1/users/nickname", {
+                method: "GET",
                 headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(jsonData)
+                    "Authorization": accessToken // Bearer 토큰 사용
+                }
             })
                 .then(response => {
                     if (!response.ok) {
-                        throw new Error("로그인 실패");
+                        throw new Error("유저 닉네임을 가져오는 데 실패했습니다.");
                     }
-                    return response.text(); // 응답을 텍스트로 처리
+                    return response.text();
                 })
-                .then(token => {
-                    localStorage.setItem("authToken", "Bearer " + token); // token 로컬 스토리지에 저장
-                    alert("로그인 성공: " + token);
-                    location.reload(); // 페이지 새로 고침
+                .then(data => {
+                    // 유저 아이디 표시
+                    document.getElementById("userNicknameDisplay").textContent = data || "유저 닉네임을 찾을 수 없습니다.";
                 })
                 .catch(error => {
-                    alert("로그인 실패, 사유 :" + error.message);
+                    document.getElementById("userNicknameDisplay").textContent = "Error: " + error.message;
                 });
-        };
 
-        document.getElementById("need_authForm").onsubmit = function (event) {
-            event.preventDefault(); // 기본 폼 제출 방지
-            const token = localStorage.getItem("authToken");
-
-            fetch("/api/v1/reviews/write", {
-                method: "POST",
+            fetch("/api/v1/users/getId", {
+                method: "GET",
                 headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": token
-                },
+                    "Authorization": accessToken // Bearer 토큰 사용
+                }
             })
                 .then(response => {
                     if (!response.ok) {
-                        throw new Error("리뷰등록 실패");
+                        throw new Error("유저 아이디를 가져오는 데 실패했습니다.");
                     }
-                    return response.text(); // 응답을 텍스트로 처리
+                    return response.text(); // 응답을 JSON으로 처리
                 })
-                .then(text => {
-                    alert(text);
-                    location.reload(); // 페이지 새로 고침
+                .then(data => {
+                    // 유저 아이디 표시
+                    document.getElementById("userIdDisplay").textContent = data || "유저 아이디를 찾을 수 없습니다.";
                 })
                 .catch(error => {
-                    alert("등록실패 :" + error.message);
+                    document.getElementById("userIdDisplay").textContent = "Error: " + error.message;
                 });
-        };
+
+        } else {
+            document.getElementById("userNicknameDisplay").textContent = "엑세스 토큰이 없으므로 유저 닉네임을 가져올 수 없습니다.";
+        }
+
+        document.getElementById('need_authForm').addEventListener('submit', function(e) {
+            e.preventDefault(); // 기본 제출 방지
+
+            const token = localStorage.getItem('accessToken'); // 토큰 가져오기
+            const formData = new FormData(this); // 폼 데이터 가져오기
+
+            fetch('/api/v1/reviews/write', {
+                method: 'POST',
+                headers: {
+                    'Authorization': token
+                },
+                body: formData
+            })
+                .then(response => response.text())
+                .then(data => alert(data))
+                .catch(error => console.error(error));
+        });
     </script>
+
+
 </main>
 </body>
 </html>

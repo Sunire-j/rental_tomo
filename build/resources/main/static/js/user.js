@@ -22,11 +22,14 @@ $("#loginForm").ready(function () {
                     if (!response.ok) {
                         throw new Error("로그인 실패");
                     }
-                    return response.text(); // 응답을 텍스트로 처리
+                    return response.json(); // 응답을 JSON으로 처리
                 })
-                .then(token => {
-                    localStorage.setItem("authToken", "Bearer " + token); // token 로컬 스토리지에 저장
-                    alert("로그인 성공: " + token);
+                .then(tokens => {
+                    // 각각의 토큰을 로컬 스토리지에 저장
+                    console.log(tokens);
+                    localStorage.setItem("accessToken", "Bearer " + tokens.accessToken);
+                    localStorage.setItem("refreshToken", "Bearer " + tokens.refreshToken);
+                    alert("로그인 성공: " + tokens.accessToken);
                     location.reload(); // 페이지 새로 고침
                 })
                 .catch(error => {
@@ -108,7 +111,7 @@ $("#loginForm").ready(function () {
                 phonenum: phonenum,
                 birth: form.birth.value,
                 sex: form.sex.value,
-                nickname : form.nickname.value
+                nickname: form.nickname.value
             };
 
             try {
@@ -144,7 +147,7 @@ $("#loginForm").ready(function () {
                     alert(formattedMessage);
                 } else {
                     alert("가입 성공! 로그인페이지로 이동합니다.");
-                    location.href="/login";
+                    location.href = "/login";
                 }
             } catch (error) {
                 console.error(`오류 발생: ${error.message}`);
