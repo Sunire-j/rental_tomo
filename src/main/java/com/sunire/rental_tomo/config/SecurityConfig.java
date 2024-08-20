@@ -44,7 +44,7 @@ public class SecurityConfig {
                                         "/js/**", "/css/**", "/img/**",
                                         "/favicon.ico","/index"
                                 ,"/login","/join/**",
-                                        "/image/**").permitAll()
+                                        "/image/**","/api/v1/token/refresh").permitAll()
                                 .requestMatchers(HttpMethod.POST,"/api/v1/reviews/write").authenticated()
                                 .requestMatchers(HttpMethod.GET, "/api/v1/users/nickname", "/api/v1/users/getId").authenticated()
                 )

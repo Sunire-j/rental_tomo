@@ -1,6 +1,7 @@
 package com.sunire.rental_tomo.controller.restapi;
 
 import com.sunire.rental_tomo.domain.dto.UserJoinRequest;
+import com.sunire.rental_tomo.service.JwtTokenService;
 import com.sunire.rental_tomo.service.UserService;
 import com.sunire.rental_tomo.utils.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,7 @@ import java.util.Map;
 public class UserController {
 
     private final UserService userService;
+    private final JwtTokenService jwtTokenService;
 
     @PostMapping("/join")
     public ResponseEntity<String> join(@RequestBody UserJoinRequest userJoinRequest) {
@@ -35,6 +37,15 @@ public class UserController {
         System.out.println(token);
         return ResponseEntity.ok().body(token);
     }
+
+    @GetMapping("/logout")
+    public ResponseEntity<String> logout(@RequestHeader("Authorization") String token) {
+    String id = userService.getId(token);
+    jwtTokenService.deleteRefreshToken(token);
+    return ResponseEntity.ok().body(id+"님, 로그아웃성공");
+    //프론트에서 엑세스 토큰 삭제시켜야함
+    }
+
 
     @GetMapping("/nickname")
     public ResponseEntity<String> nickname(@RequestHeader("Authorization") String token) {

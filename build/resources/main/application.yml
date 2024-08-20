@@ -10,7 +10,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
     show-sql: true
 
   thymeleaf:
@@ -19,6 +19,9 @@ spring:
 jwt:
   token:
     secret: ${JWT_SECRET}
+    access_expiration : 3600000
+    refresh_expiration : 604800000
+
 
 logging:
   level:

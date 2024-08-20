@@ -56,7 +56,20 @@
             })
                 .then(response => {
                     if (!response.ok) {
-                        throw new Error("유저 닉네임을 가져오는 데 실패했습니다.");
+                        return response.text()
+                            .then(async message=>{
+                                // message에 expired가 나오면 리프레시 토큰 보내도록 해야함.
+                                if(message === 'Access token expired. Please refresh your token.' && localStorage.getItem('refreshToken')){
+                                    var result = await refreshAccessToken();
+                                    if(!result){
+                                        throw new Error("유저 닉네임 못가져옴");
+                                    }else{
+
+                                    }
+                                }
+
+                            })
+
                     }
                     return response.text();
                 })

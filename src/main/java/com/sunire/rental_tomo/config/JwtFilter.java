@@ -2,6 +2,7 @@ package com.sunire.rental_tomo.config;
 
 import com.sunire.rental_tomo.service.UserService;
 import com.sunire.rental_tomo.utils.JwtTokenUtil;
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -46,27 +47,42 @@ public class JwtFilter extends OncePerRequestFilter {
 
         //expired 확인
 
-        if(JwtTokenUtil.isExpired(token,secretKey)){
-            log.error("expired token");
+        try{
+            if(JwtTokenUtil.isExpired(token,secretKey)){
+                log.error("expired token");
+//            filterChain.doFilter(request,response);
+                //여기에 리프레시 토큰활용 재발급 받도록 유도하게 리턴해야함.
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 401 상태 코드
+                response.getWriter().write("Access token expired. Please refresh your token."); // 메시지 전송
+                return;
+            }
+            log.info("secretKey in jwtfilter: {}", secretKey);
+
+            //getUserid
+            String username = JwtTokenUtil.getUserid(token,secretKey);
+            log.info("username: {}", username);
+
+            //add auth
+            UsernamePasswordAuthenticationToken auth =
+                    new UsernamePasswordAuthenticationToken(username, null, List.of(new SimpleGrantedAuthority("ROLE_USER")));
+
+            //detail
+            auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+            SecurityContextHolder.getContext().setAuthentication(auth);
             filterChain.doFilter(request,response);
-            //response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+        }catch(ExpiredJwtException e){
+            response.setContentType("application/json");
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getWriter().write("{\"message\": \"Access token expired. Please refresh your token.\"}");
+            return;
+        }catch(Exception e){
+            log.error("Authentication error : {}", e.getMessage());
+            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
             return;
         }
 
-        log.info("secretKey in jwtfilter: {}", secretKey);
 
-        //getUserid
-        String username = JwtTokenUtil.getUserid(token,secretKey);
-        log.info("username: {}", username);
 
-        //add auth
-        UsernamePasswordAuthenticationToken auth =
-                new UsernamePasswordAuthenticationToken(username, null, List.of(new SimpleGrantedAuthority("ROLE_USER")));
-
-        //detail
-        auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-        SecurityContextHolder.getContext().setAuthentication(auth);
-        filterChain.doFilter(request,response);
 
     }
 }

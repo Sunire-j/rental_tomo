@@ -19,6 +19,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final JwtTokenService jwtTokenService;
 
     @Value("${jwt.token.secret}")
     private String key;
@@ -74,7 +75,7 @@ public class UserService {
         //generate token and return
 
         System.out.println("key is " +key);
-        return JwtTokenUtil.createToken(user.getUserid(), key,expireTimeMs, expireTimeMs_Refresh);
+        return JwtTokenUtil.createToken(user.getUserid(), key,expireTimeMs, expireTimeMs_Refresh, jwtTokenService);
     }
 
     public String nickname(String token) {

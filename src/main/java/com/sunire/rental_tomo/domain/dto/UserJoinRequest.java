@@ -19,14 +19,4 @@ public class UserJoinRequest {
     private User.Sex sex; // 여전히 String으로 유지할 수 있지만, 필요시 LocalDate로 변경 가능
     private LocalDate birth; // LocalDate로 변경
     private String email;
-
-    public UserJoinRequest(String userid, String password, String nickname, String phonenum, String email, User.Sex sex, LocalDate birth) {
-        this.userid = userid;
-        this.password = password;
-        this.nickname = nickname;
-        this.phonenum = phonenum;
-        this.sex = sex;
-        this.birth = birth;
-        this.email = email;
-    }
 }
