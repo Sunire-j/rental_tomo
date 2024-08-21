@@ -3,7 +3,6 @@ package com.sunire.rental_tomo.controller.restapi;
 import com.sunire.rental_tomo.domain.dto.UserJoinRequest;
 import com.sunire.rental_tomo.service.JwtTokenService;
 import com.sunire.rental_tomo.service.UserService;
-import com.sunire.rental_tomo.utils.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -11,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
-
 
 @RestController
 @RequiredArgsConstructor
@@ -24,11 +22,11 @@ public class UserController {
 
     @PostMapping("/join")
     public ResponseEntity<String> join(@RequestBody UserJoinRequest userJoinRequest) {
+
         log.info("UserJoinRequest: {}", userJoinRequest);
         String hi = userService.join(userJoinRequest);
         return new ResponseEntity<>("User joined successfully", HttpStatus.OK);
     }
-
 
 
     @PostMapping("/login")
@@ -40,10 +38,10 @@ public class UserController {
 
     @GetMapping("/logout")
     public ResponseEntity<String> logout(@RequestHeader("Authorization") String token) {
-    String id = userService.getId(token);
-    jwtTokenService.deleteRefreshToken(token);
-    return ResponseEntity.ok().body(id+"님, 로그아웃성공");
-    //프론트에서 엑세스 토큰 삭제시켜야함
+        String id = userService.getId(token);
+        jwtTokenService.deleteRefreshToken(token);
+        return ResponseEntity.ok().body(id + "님, 로그아웃성공");
+        //프론트에서 엑세스 토큰 삭제시켜야함
     }
 
 

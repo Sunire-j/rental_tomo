@@ -5,10 +5,12 @@
     <title>Title</title>
     <script src="/js/jquery-3.7.1.min.js"></script>
     <script src="/js/jwtheader.js"></script>
+    <script src="/js/cookie.js"></script>
     <!--    <script src="/js/bootstrap.bundle.min.js"></script>-->
     <!--    <link rel="stylesheet" href="/css/bootstrap.min.css"/>-->
     <link rel="stylesheet" href="/css/pico.fuchsia.min.css"/>
     <meta name="authToken" content="">
+    <script src="/js/devPage.js"></script>
 </head>
 <body>
 <main class="container">
@@ -39,89 +41,7 @@
     </form>
 
     <script>
-        // 로컬 스토리지에서 토큰 가져오기
-        const accessToken = localStorage.getItem("accessToken");
-        const refreshToken = localStorage.getItem("refreshToken");
 
-        // 페이지에 토큰 표시하기
-        document.getElementById("accessTokenDisplay").textContent = accessToken ? accessToken : "엑세스 토큰이 없습니다.";
-        document.getElementById("refreshTokenDisplay").textContent = refreshToken ? refreshToken : "리프레시 토큰이 없습니다.";
-
-        if (accessToken) {
-            fetch("/api/v1/users/nickname", {
-                method: "GET",
-                headers: {
-                    "Authorization": accessToken // Bearer 토큰 사용
-                }
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        return response.text()
-                            .then(async message=>{
-                                // message에 expired가 나오면 리프레시 토큰 보내도록 해야함.
-                                if(message === 'Access token expired. Please refresh your token.' && localStorage.getItem('refreshToken')){
-                                    var result = await refreshAccessToken();
-                                    if(!result){
-                                        throw new Error("유저 닉네임 못가져옴");
-                                    }else{
-
-                                    }
-                                }
-
-                            })
-
-                    }
-                    return response.text();
-                })
-                .then(data => {
-                    // 유저 아이디 표시
-                    document.getElementById("userNicknameDisplay").textContent = data || "유저 닉네임을 찾을 수 없습니다.";
-                })
-                .catch(error => {
-                    document.getElementById("userNicknameDisplay").textContent = "Error: " + error.message;
-                });
-
-            fetch("/api/v1/users/getId", {
-                method: "GET",
-                headers: {
-                    "Authorization": accessToken // Bearer 토큰 사용
-                }
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error("유저 아이디를 가져오는 데 실패했습니다.");
-                    }
-                    return response.text(); // 응답을 JSON으로 처리
-                })
-                .then(data => {
-                    // 유저 아이디 표시
-                    document.getElementById("userIdDisplay").textContent = data || "유저 아이디를 찾을 수 없습니다.";
-                })
-                .catch(error => {
-                    document.getElementById("userIdDisplay").textContent = "Error: " + error.message;
-                });
-
-        } else {
-            document.getElementById("userNicknameDisplay").textContent = "엑세스 토큰이 없으므로 유저 닉네임을 가져올 수 없습니다.";
-        }
-
-        document.getElementById('need_authForm').addEventListener('submit', function(e) {
-            e.preventDefault(); // 기본 제출 방지
-
-            const token = localStorage.getItem('accessToken'); // 토큰 가져오기
-            const formData = new FormData(this); // 폼 데이터 가져오기
-
-            fetch('/api/v1/reviews/write', {
-                method: 'POST',
-                headers: {
-                    'Authorization': token
-                },
-                body: formData
-            })
-                .then(response => response.text())
-                .then(data => alert(data))
-                .catch(error => console.error(error));
-        });
     </script>
 
 

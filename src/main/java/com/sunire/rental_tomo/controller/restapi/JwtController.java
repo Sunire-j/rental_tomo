@@ -38,9 +38,11 @@ public class JwtController {
 
     @PostMapping("/refresh")
     public ResponseEntity<Map<String, String>> refreshToken(@RequestHeader("refresh_token") String refreshToken) {
-
+        //토큰 베어러가 안떨어진 상태
+        String refreshToken_ = refreshToken.substring(7);
+        System.out.println(refreshToken_);
         // 리프레시 토큰 검증
-        RefreshToken storedRefreshToken = jwtTokenService.findByToken(refreshToken)
+        RefreshToken storedRefreshToken = jwtTokenService.findByToken(refreshToken_)
                 .orElseThrow(() -> new AppException(INVALID_REFRESH_TOKEN, "잘못된 접근"));
         //로그인 재시도로 유도해야함
         if (storedRefreshToken.getExpirationDate().before(new Date())) {

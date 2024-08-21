@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function() {
-    const accessToken = localStorage.getItem("accessToken");
-    const refreshToken = localStorage.getItem("refreshToken");
+    const accessToken = getCookie("accessToken");
+    const refreshToken = getCookie("refreshToken");
     if (accessToken) {
         const metaToken = document.createElement('meta');
         metaToken.name = "Authorization";
@@ -10,38 +10,43 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 async function refreshAccessToken() {
-    const refreshToken = localStorage.getItem('refreshToken');
+    // const refreshToken = localStorage.getItem('refreshToken');
+    const refreshToken = getCookie('refreshToken');
 
     if (!refreshToken) {
         console.error("리프레시 토큰이 없습니다.");
+        return false; // 리프레시 토큰이 없으면 false 반환
     }
 
-    // 리프레시 토큰을 사용하여 새로운 엑세스 토큰을 요청
-    fetch("/api/v1/token/refresh", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "refresh_token" : refreshToken
-        }
-    })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('리프레시 토큰이 유효하지 않거나 서버 오류');
-                return false;
+    try {
+        // 리프레시 토큰을 사용하여 새로운 엑세스 토큰을 요청
+        const response = await fetch("/api/v1/token/refresh", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "refresh_token": refreshToken
             }
-            return response.json();
-        })
-        .then(data => {
-            // 새로운 엑세스 토큰을 로컬 스토리지에 저장
-            localStorage.setItem('accessToken', data.accessToken);
-            // 필요시 리프레시 토큰도 업데이트
-            if (data.refreshToken) {
-                localStorage.setItem('refreshToken', data.refreshToken);
-            }
-            return true;
-        })
-        .catch(error => {
-            console.error("엑세스 토큰 갱신 실패:", error);
-            return false;
         });
+
+        if (!response.ok) {
+            throw new Error('리프레시 토큰이 유효하지 않거나 서버 오류');
+        }
+
+        const data = await response.json();
+
+        // 새로운 엑세스 토큰을 로컬 스토리지에 저장
+        // localStorage.setItem('accessToken', "Bearer " + data.accessToken);
+        setCookie('accessToken', "Bearer " + data.accessToken);
+
+        // 필요시 리프레시 토큰도 업데이트
+        if (data.refreshToken) {
+            // localStorage.setItem('refreshToken', "Bearer " + data.refreshToken);
+            setCookie('refreshToken', "Bearer " + data.refreshToken);
+        }
+
+        return true; // 성공적으로 갱신된 경우 true 반환
+    } catch (error) {
+        console.error("엑세스 토큰 갱신 실패:", error);
+        return false; // 오류 발생 시 false 반환
+    }
 }

@@ -1,6 +1,9 @@
-$("#loginForm").ready(function () {
 
-    if (document.querySelector("#loginForm")) {
+//로그인 Post요청 처리
+function login(){
+    const loginform = document.querySelector("#loginForm");
+
+    if (loginform) {
         document.getElementById("loginForm").onsubmit = function (event) {
             event.preventDefault(); // 기본 폼 제출 방지
             const formData = new FormData(this);
@@ -25,10 +28,8 @@ $("#loginForm").ready(function () {
                     return response.json(); // 응답을 JSON으로 처리
                 })
                 .then(tokens => {
-                    // 각각의 토큰을 로컬 스토리지에 저장
-                    console.log(tokens);
-                    localStorage.setItem("accessToken", "Bearer " + tokens.accessToken);
-                    localStorage.setItem("refreshToken", "Bearer " + tokens.refreshToken);
+                    setCookie("accessToken","Bearer " + tokens.accessToken);
+                    setCookie("refreshToken", "Bearer " + tokens.refreshToken);
                     alert("로그인 성공: " + tokens.accessToken);
                     location.reload(); // 페이지 새로 고침
                 })
@@ -37,8 +38,12 @@ $("#loginForm").ready(function () {
                 });
         };
     }
+}
 
-    if (document.querySelector("#all_terms")) {
+//회원가입 시 약관동의 체크처리
+function join_check_terms(){
+    const terms_select = document.querySelector("#all_terms");
+    if(terms_select){
         const allTermsCheckbox = document.querySelector("#all_terms");
         const terms1Checkbox = document.querySelector("#terms1");
         const terms2Checkbox = document.querySelector("#terms2");
@@ -75,11 +80,13 @@ $("#loginForm").ready(function () {
             location.href = "/join/2";
         })
     }
+}
 
 
-//     여기서부터 조인
-
-    if (document.querySelector("#join_form")) {
+//회원가입 시 정보입력 후 post요청
+function join_insertUserInfo(){
+    const join_form = document.querySelector("#join_form");
+    if(join_form){
         document.getElementById("join_form").addEventListener("submit", async function (event) {
             event.preventDefault(); // 기본 submit 이벤트 방지
 
@@ -154,5 +161,9 @@ $("#loginForm").ready(function () {
             }
         });
     }
-});
+}
 
+
+document.addEventListener("DOMContentLoaded", login);
+document.addEventListener("DOMContentLoaded", join_check_terms);
+document.addEventListener("DOMContentLoaded", join_insertUserInfo);

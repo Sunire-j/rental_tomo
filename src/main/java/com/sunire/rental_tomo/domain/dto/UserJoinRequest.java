@@ -11,6 +11,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserJoinRequest {
+
     private Long id;
     private String userid;
     private String password;
