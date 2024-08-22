@@ -1,5 +1,6 @@
 package com.sunire.rental_tomo.service;
 
+import com.sunire.rental_tomo.domain.dto.UserInfoEditRequest;
 import com.sunire.rental_tomo.domain.dto.UserJoinRequest;
 import com.sunire.rental_tomo.domain.entity.User;
 import com.sunire.rental_tomo.enumFile.TokenName;
@@ -116,5 +117,32 @@ public class UserService {
         String username = user.map(User::getNickname).orElse(null);
 
         return username;
+    }
+
+    public Long getPk(String token) {
+        if (token == null || !token.startsWith("Bearer ")) {
+            throw new AppException(ErrorCode.TOKEN_NOT_FOUND, "토큰이 유효하지 않거나, 존재하지 않습니다.");
+        }
+
+        String token_temp = token.substring(7);
+        //토큰꺼냄 로그인아이디니까 pk키를 구해야함
+        String userid = JwtTokenUtil.getUserid(token_temp, key);
+        User user = userRepository.findByUserid(userid).orElse(null);
+
+        return user.getId();
+    }
+
+    public Optional<User> userInfo(String name){
+        return userRepository.findByNickname(name);
+    }
+
+    public void updateUser(UserInfoEditRequest userInfoEditRequest){
+        User user = userRepository.findById(userInfoEditRequest.getId()).orElse(null);
+
+        user.setNickname(userInfoEditRequest.getNickname());
+        user.setEmail(userInfoEditRequest.getEmail());
+        user.setSns(userInfoEditRequest.getSns());
+
+        userRepository.save(user);
     }
 }

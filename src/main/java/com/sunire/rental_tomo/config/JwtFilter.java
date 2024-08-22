@@ -36,42 +36,55 @@ public class JwtFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
         final String token = CookieUtil.getCookie(TokenName.ACCESS_TOKEN.getName(), request);
-        if(token==null){
+        final String refresh = CookieUtil.getCookie(TokenName.REFRESH_TOKEN.getName(), request);
+
+        String requestURI = request.getRequestURI();
+        if(requestURI.equals("/api/v1/token/refresh")||requestURI.equals("/api/v1/users/logout")) {
             filterChain.doFilter(request,response);
+            return;
         }
 
-        //expired 확인
-        try{
-            if(JwtTokenUtil.isExpired(token,secretKey)){
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 401 상태 코드
-                response.getWriter().write("Access token expired. Please refresh your token."); // 메시지 전송
-                return;
+        //1. 토큰이 둘 다 없으면 그냥 jwt없는걸로 취급
+        if (token == null && refresh == null) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+        //2. refresh가 만료인지 먼저 체크, refresh가 만료면 access도 당연히 만료이므로
+        try {
+            if (!JwtTokenUtil.isExpired(refresh, secretKey)) {//refresh null체크는 1에서 했음
+
+                //3. access도 만료인지 체크, 만료라면 refresh로 리디렉션
+                try {
+                    if (!JwtTokenUtil.isExpired(token, secretKey)) {//token null체크 1에서 함
+                        //아무것도 없이 그냥 진행
+                        System.out.println("cool!");
+                    }
+
+                } catch (ExpiredJwtException e) {
+                    response.sendRedirect("/api/v1/token/refresh");
+                    //이게 좀 문제임. 결국 리프레시로 가더라도 바로 컨트롤러로 들어가지 않고 필터체인을 거치고있음.
+                    return;
+                }
+
             }
-            //getUserid
-            String username = JwtTokenUtil.getUserid(token,secretKey);
-            log.info("username: {}", username);
-
-            //add auth
-            UsernamePasswordAuthenticationToken auth =
-                    new UsernamePasswordAuthenticationToken(username, null, List.of(new SimpleGrantedAuthority("ROLE_USER")));
-
-            //detail
-            auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-            SecurityContextHolder.getContext().setAuthentication(auth);
-            filterChain.doFilter(request,response);
-        }catch(ExpiredJwtException e){
-            response.setContentType("application/json");
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.getWriter().write("{\"message\": \"Access token expired. Please refresh your token.\"}");
-            return;
-        }catch(Exception e){
-            log.error("Authentication error : {}", e.getMessage());
-            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+        } catch (ExpiredJwtException e) {
+            response.sendRedirect("/api/v1/users/logout");//리프레시 만료라면 쿠키 다 죽여버리게 /logout으로 이동
             return;
         }
+        //expired 확인
 
+        //getUserid
+        String username = JwtTokenUtil.getUserid(token, secretKey);
+        log.info("username: {}", username);
 
+        //add auth
+        UsernamePasswordAuthenticationToken auth =
+                new UsernamePasswordAuthenticationToken(username, null, List.of(new SimpleGrantedAuthority("ROLE_USER")));
 
-
+        //detail
+        auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+        SecurityContextHolder.getContext().setAuthentication(auth);
+        filterChain.doFilter(request, response);
     }
 }

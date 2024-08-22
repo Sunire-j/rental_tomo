@@ -68,4 +68,33 @@ public class HomeController {
         }
         return "user/join_step2.th.html";
     }
+
+//    마이페이지 시작
+    @GetMapping("/mypage")
+    public String mypage(Model model, HttpServletRequest request) {
+        String name = userService.isLogin(request);
+        if(name!=null){
+            model = setLoginStatus.setLogin(model, name);
+        }
+        User user = userService.userInfo(name).orElse(null);
+        model.addAttribute("user", user);
+
+//        들어가야 하는 정보 아이디, 휴대폰번호, 성별, SNS, 닉네임, 이메일, 생일
+        //자기소개 테이블 추가해야하고, 프로필사진 기능 추가하고 불러와야함
+        return "user/mypage_intro.th.html";
+    }
+
+    @GetMapping("/mypage/edit")
+    public String mypage_edit(Model model, HttpServletRequest request) {
+        String name = userService.isLogin(request);
+        if(name!=null){
+            model = setLoginStatus.setLogin(model, name);
+        }
+        User user = userService.userInfo(name).orElse(null);
+        model.addAttribute("user", user);
+
+//        들어가야 하는 정보 아이디, 휴대폰번호, 성별, SNS, 닉네임, 이메일, 생일
+        //자기소개 테이블 추가해야하고, 프로필사진 기능 추가하고 불러와야함
+        return "user/mypage_editinfo.th.html";
+    }
 }

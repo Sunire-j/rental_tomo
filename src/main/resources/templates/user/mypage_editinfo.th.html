@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="/js/cookie.js"></script>
+    <script src="/js/jquery-3.7.1.min.js"></script>
+    <script src="/js/jwtheader.js"></script>
+    <!--    <link rel="stylesheet" href="/css/bootstrap.min.css"/>-->
+    <link rel="stylesheet" href="/css/pico.fuchsia.min.css"/>
+    <link rel="stylesheet" href="/css/global.css"/>
+    <meta name="authToken" content="">
+    <script src="/js/mypage.js"></script>
+    <link rel="stylesheet" href="/css/mypage.css"/>
+    <title>Title</title>
+</head>
+<body>
+<main class="container">
+    <div th:replace="reusable/header.html::header(${isLogin}, ${username})"></div>
+    <nav aria-label="breadcrumb">
+        <ul>
+            <li><a href="/mypage"><h1>마이페이지</h1></a></li>
+            <li><a href="/mypage/edit"><h1>회원정보 수정</h1></a></li>
+        </ul>
+    </nav>
+    <div class="image-section">
+        <img class="mypage-pic" src="/image/temp.png"/>
+        <!--    이미지 소스 경로 th로 넣어줘야함-->
+        <div>
+            <h3><strong th:text="${user.nickname}"></strong></h3>
+            <p>자기소개 자기소개 자기소개자기소개 자기소개 자기소개자기소개 자기소개 자기소개자기소개 자기소개 자기소개자기소개 자기소개 자기소개</p>
+        </div>
+    </div>
+    <div role="group">
+        <!--    상단 메뉴 div, button이나 a태그로 구성-->
+        <button class="outline contrast" onclick="location.href='/mypage'">내 정보</button>
+        <button class="outline" onclick="location.href='/mypage/edit'">회원정보 수정</button>
+        <!--    정보수정에 회원탈퇴 들어갈거임-->
+        <button class="outline contrast" onclick="location.href='/mypage/favorite'">즐겨찾기 목록</button>
+    </div>
+    <div class="grid">
+        <div>
+            <form method="post" id="edit_form" action="/api/v1/users/edit">
+                <fieldset>
+                    <label>닉네임<input type="text" name="nickname" placeholder="닉네임"/></label>
+                    <label>이메일<input type="email" name="email" placeholder="이메일"/></label>
+                    <label>SNS<input type="text" name="sns" placeholder="SNS"/></label>
+                </fieldset>
+                <input type="submit" value="수정하기"/>
+            </form>
+        </div>
+        <div>
+            <form method="post" id="pwd_form" action="/api/v1/users/changepwd">
+                <fieldset>
+                    <label>새 비밀번호<input type="password" name="password" placeholder="새 비밀번호"/></label>
+                    <label>이메일<input type="password" name="passwordre" placeholder="새 비밀번호 확인"/></label>
+                </fieldset>
+                <input type="submit" value="비밀번호 변경"/>
+            </form>
+        </div>
+    </div>
+
+</main>
+
+</body>
+</html>

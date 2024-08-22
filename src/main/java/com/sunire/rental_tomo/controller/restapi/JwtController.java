@@ -12,14 +12,13 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import java.net.URI;
 import java.util.Date;
 import java.util.Map;
 
@@ -43,7 +42,7 @@ public class JwtController {
     @Value("${jwt.token.secret}")
     private String secretkey;
 
-    @PostMapping("/refresh")
+    @GetMapping("/refresh")
     public ResponseEntity<String> refreshToken(HttpServletRequest request) {
 
         String refreshToken = CookieUtil.getCookie(TokenName.REFRESH_TOKEN.getName(), request);
@@ -78,7 +77,10 @@ public class JwtController {
             response.addCookie(refreshTokenCookie);
         }
 
-        return ResponseEntity.ok().body("토큰 재발급 성공");
+        return ResponseEntity
+                .status(HttpStatus.FOUND)
+                .location(URI.create("/"))
+                .build();
     }
 
 }

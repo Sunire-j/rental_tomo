@@ -1,6 +1,8 @@
 package com.sunire.rental_tomo.controller.restapi;
 
+import com.sunire.rental_tomo.domain.dto.UserInfoEditRequest;
 import com.sunire.rental_tomo.domain.dto.UserJoinRequest;
+import com.sunire.rental_tomo.domain.entity.User;
 import com.sunire.rental_tomo.enumFile.TokenName;
 import com.sunire.rental_tomo.service.JwtTokenService;
 import com.sunire.rental_tomo.service.UserService;
@@ -32,7 +34,7 @@ public class UserController {
     public ResponseEntity<String> join(@RequestBody UserJoinRequest userJoinRequest) {
 
         log.info("UserJoinRequest: {}", userJoinRequest);
-        String hi = userService.join(userJoinRequest);
+        userService.join(userJoinRequest);
         return new ResponseEntity<>("User joined successfully", HttpStatus.OK);
     }
 
@@ -56,31 +58,30 @@ public class UserController {
     @GetMapping("/logout")
     public ResponseEntity<String> logout(HttpServletRequest request) {
         String token = CookieUtil.getCookie_Bearer(TokenName.ACCESS_TOKEN.getName(), request);
-        String id = userService.getId(token);
-        jwtTokenService.deleteRefreshToken(token);
+        try {
+            jwtTokenService.deleteRefreshToken(token);
+        } catch (Exception e) {
+            log.error("Delete refresh token failed");
+        }finally{
+            Cookie accessTokenCookie = CookieUtil.createCookie("accessToken", null, 0);
+            Cookie refreshTokenCookie = CookieUtil.createCookie("refreshToken", null, 0);
 
-        Cookie accessTokenCookie = CookieUtil.createCookie("accessToken", null, 0);
-        Cookie refreshTokenCookie = CookieUtil.createCookie("refreshToken", null, 0);
-
-        HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
-        if (response != null) {
-            response.addCookie(accessTokenCookie);
-            response.addCookie(refreshTokenCookie);
+            HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
+            if (response != null) {
+                response.addCookie(accessTokenCookie);
+                response.addCookie(refreshTokenCookie);
+            }
+            return ResponseEntity
+                    .status(HttpStatus.FOUND)
+                    .location(URI.create("/login"))
+                    .build();
         }
-
-        return ResponseEntity
-                .status(HttpStatus.FOUND)
-                .location(URI.create("/login"))
-                .build();
-        //프론트에서 엑세스 토큰 삭제시켜야함
-        //ㄴㄴ 여기에서 깡통쿠키 만들어서 보내버려야함
     }
 
 
     @GetMapping("/nickname")
     public ResponseEntity<String> nickname(HttpServletRequest request) {
         String token = CookieUtil.getCookie_Bearer(TokenName.ACCESS_TOKEN.getName(), request);
-        System.out.println("컨트롤러 닉네임 토큰 : " + token);
         String name = userService.nickname(token);
         return ResponseEntity.ok().body(name);
     }
@@ -90,6 +91,17 @@ public class UserController {
         String token = CookieUtil.getCookie_Bearer(TokenName.ACCESS_TOKEN.getName(), request);
         String id = userService.getId(token);
         return ResponseEntity.ok().body(id);
+    }
+
+    @PostMapping("/edit")
+    public ResponseEntity<String> edit(
+            @RequestBody UserInfoEditRequest userInfoEditRequest,
+            HttpServletRequest request) {
+        String token = CookieUtil.getCookie_Bearer(TokenName.ACCESS_TOKEN.getName(), request);
+        Long id = userService.getPk(token);
+        userInfoEditRequest.setId(id);
+
+        return ResponseEntity.ok().build();
     }
 }
 

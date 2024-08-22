@@ -23,7 +23,7 @@
             <li><a href="/">개발용페이지</a></li>
             <li th:if="${isLogin!='Y'}"><button class="secondary" onclick="location.href='/login'">로그인/회원가입</button></li>
             <li th:if="${isLogin=='Y'}"><button class="secondary" onclick="location.href='/api/v1/users/logout'">로그아웃</button></li>
-            <li th:if="${isLogin=='Y'}" th:text="${username}"></li>
+            <li th:if="${isLogin=='Y'}"><a href="/mypage" th:text="${username}"></a></li>
         </ul>
     </nav>
 </header>
