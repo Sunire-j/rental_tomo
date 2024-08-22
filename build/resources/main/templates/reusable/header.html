@@ -12,7 +12,7 @@
     <title>Title</title>
 </head>
 <body>
-<header th:fragment="header">
+<header th:fragment="header(isLogin, username)">
     <nav>
         <ul>
             <li><strong>Rental Tomo / 렌탈 친구</strong></li>
@@ -21,7 +21,9 @@
             <li><a href="#">홈</a></li>
             <li><a href="#">이용안내</a></li>
             <li><a href="/">개발용페이지</a></li>
-            <li><button class="secondary" onclick="location.href='/login'">로그인/회원가입</button></li>
+            <li th:if="${isLogin!='Y'}"><button class="secondary" onclick="location.href='/login'">로그인/회원가입</button></li>
+            <li th:if="${isLogin=='Y'}"><button class="secondary" onclick="location.href='/api/v1/users/logout'">로그아웃</button></li>
+            <li th:if="${isLogin=='Y'}" th:text="${username}"></li>
         </ul>
     </nav>
 </header>

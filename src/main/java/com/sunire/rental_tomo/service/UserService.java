@@ -2,16 +2,20 @@ package com.sunire.rental_tomo.service;
 
 import com.sunire.rental_tomo.domain.dto.UserJoinRequest;
 import com.sunire.rental_tomo.domain.entity.User;
+import com.sunire.rental_tomo.enumFile.TokenName;
 import com.sunire.rental_tomo.exception.AppException;
 import com.sunire.rental_tomo.exception.ErrorCode;
 import com.sunire.rental_tomo.repository.UserRepository;
+import com.sunire.rental_tomo.utils.CookieUtil;
 import com.sunire.rental_tomo.utils.JwtTokenUtil;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -79,8 +83,6 @@ public class UserService {
     }
 
     public String nickname(String token) {
-        System.out.println("서비스에 닉네임 메서드 내부 토큰 ->");
-        System.out.println(token);
         if (token == null || !token.startsWith("Bearer ")) {
             throw new AppException(ErrorCode.TOKEN_NOT_FOUND, "토큰이 유효하지 않거나, 존재하지 않습니다.");
         }
@@ -100,5 +102,19 @@ public class UserService {
 
         String token_temp = token.substring(7);
         return JwtTokenUtil.getUserid(token_temp, key);
+    }
+
+    public String isLogin(HttpServletRequest request){
+        String token = CookieUtil.getCookie_Bearer(TokenName.ACCESS_TOKEN.getName(), request);
+        //로그인아니면 null, 맞으면 id반환
+        if(token==null || !token.startsWith("Bearer ")){
+            return null;
+        }
+        String token_temp = token.substring(7);
+        String userid = JwtTokenUtil.getUserid(token_temp, key);
+        Optional<User> user = userRepository.findByUserid(userid);
+        String username = user.map(User::getNickname).orElse(null);
+
+        return username;
     }
 }

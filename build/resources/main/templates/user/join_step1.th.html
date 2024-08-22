@@ -15,7 +15,7 @@
 </head>
 <body>
 <main class="container">
-  <div th:replace="reusable/header.html::header"></div>
+  <div th:replace="reusable/header.html::header(${isLogin}, ${username})"></div>
 <!--  단계표시-->
   <h2>회원가입 약관</h2>
   <div class="tnc">

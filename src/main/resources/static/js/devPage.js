@@ -108,7 +108,7 @@ function postTest(){
                         return response.text()
                             .then(async message=>{
                                 const message_ = await message;
-                                console.log(message_);
+                                alert(message_);
                             })
                     }
                 })

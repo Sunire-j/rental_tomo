@@ -14,7 +14,7 @@
 </head>
 <body>
 <main class="container">
-    <div th:replace="reusable/header.html::header"></div>
+    <div th:replace="reusable/header.html::header(${isLogin}, ${username})"></div>
     <p>개발용 페이지</p>
 
     <div>

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import java.net.URI;
 import java.util.Map;
 
 @RestController
@@ -40,17 +41,8 @@ public class UserController {
     public ResponseEntity<String> login(@RequestBody UserJoinRequest userJoinRequest) {
         Map<String, String> token = userService.login(userJoinRequest);
 
-        Cookie accessTokenCookie = new Cookie("accessToken", token.get("accessToken"));
-        accessTokenCookie.setHttpOnly(true); // 보안 설정
-        accessTokenCookie.setPath("/"); // 경로 설정
-        accessTokenCookie.setMaxAge(60 * 60 * 24*7); // 쿠키 만료 시간 설정 (1시간)
-        accessTokenCookie.setSecure(true);
-
-        Cookie refreshTokenCookie = new Cookie("refreshToken", token.get("refreshToken"));
-        refreshTokenCookie.setHttpOnly(true); // 보안 설정
-        refreshTokenCookie.setPath("/"); // 경로 설정
-        refreshTokenCookie.setMaxAge(60 * 60 * 24*7); // 쿠키 만료 시간 설정 (1일)
-        refreshTokenCookie.setSecure(true);
+        Cookie accessTokenCookie = CookieUtil.createCookie("accessToken", token.get("accessToken"), 604800);
+        Cookie refreshTokenCookie = CookieUtil.createCookie("refreshToken", token.get("refreshToken"), 604800);
 
         HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
         if (response != null) {
@@ -62,18 +54,33 @@ public class UserController {
     }
 
     @GetMapping("/logout")
-    public ResponseEntity<String> logout(@RequestHeader("Authorization") String token) {
+    public ResponseEntity<String> logout(HttpServletRequest request) {
+        String token = CookieUtil.getCookie_Bearer(TokenName.ACCESS_TOKEN.getName(), request);
         String id = userService.getId(token);
         jwtTokenService.deleteRefreshToken(token);
-        return ResponseEntity.ok().body(id + "님, 로그아웃성공");
+
+        Cookie accessTokenCookie = CookieUtil.createCookie("accessToken", null, 0);
+        Cookie refreshTokenCookie = CookieUtil.createCookie("refreshToken", null, 0);
+
+        HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
+        if (response != null) {
+            response.addCookie(accessTokenCookie);
+            response.addCookie(refreshTokenCookie);
+        }
+
+        return ResponseEntity
+                .status(HttpStatus.FOUND)
+                .location(URI.create("/login"))
+                .build();
         //프론트에서 엑세스 토큰 삭제시켜야함
+        //ㄴㄴ 여기에서 깡통쿠키 만들어서 보내버려야함
     }
 
 
     @GetMapping("/nickname")
     public ResponseEntity<String> nickname(HttpServletRequest request) {
         String token = CookieUtil.getCookie_Bearer(TokenName.ACCESS_TOKEN.getName(), request);
-        System.out.println("컨트롤러 닉네임 토큰 : "+token);
+        System.out.println("컨트롤러 닉네임 토큰 : " + token);
         String name = userService.nickname(token);
         return ResponseEntity.ok().body(name);
     }

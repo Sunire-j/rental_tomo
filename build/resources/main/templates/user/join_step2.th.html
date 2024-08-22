@@ -14,7 +14,7 @@
 </head>
 <body>
 <main class="container">
-    <div th:replace="reusable/header.html::header"></div>
+    <div th:replace="reusable/header.html::header(${isLogin}, ${username})"></div>
     <!--  정보 입력 시작-->
     <!--db의 컬럼은 아이디, 비밀번호, 닉네임, 폰번호, 성별, 생일정도-->
     <!--  유효성검사는 빼고 입력만 받도록 하기-->

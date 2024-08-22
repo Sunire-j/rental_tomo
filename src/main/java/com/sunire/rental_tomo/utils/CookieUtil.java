@@ -2,6 +2,7 @@ package com.sunire.rental_tomo.utils;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.ui.Model;
 
 public class CookieUtil {
 
@@ -38,5 +39,15 @@ public class CookieUtil {
         }
         return "Bearer " + token;
     }
+
+    public static Cookie createCookie(String name, String value, int maxAge) {
+        Cookie cookie = new Cookie(name, value);
+        cookie.setMaxAge(maxAge);
+        cookie.setPath("/");
+        cookie.setHttpOnly(true);
+        cookie.setSecure(true);
+        return cookie;
+    }
+
 
 }

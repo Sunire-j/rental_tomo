@@ -26,10 +26,10 @@ function login(){
                         console.log(response);
                         throw new Error("로그인 실패");
                     }
-                    return response.json(); // 응답을 JSON으로 처리
+                    return response.text(); // 응답을 JSON으로 처리
                 })
-                .then(tokens => {
-                    alert("로그인 성공: " + tokens.accessToken);
+                .then(message => {
+                    alert(message);
                     location.reload(); // 페이지 새로 고침
                 })
                 .catch(error => {
