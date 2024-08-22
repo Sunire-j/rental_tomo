@@ -1,14 +1,3 @@
-document.addEventListener("DOMContentLoaded", function() {
-    const accessToken = getCookie("accessToken");
-    const refreshToken = getCookie("refreshToken");
-    if (accessToken) {
-        const metaToken = document.createElement('meta');
-        metaToken.name = "Authorization";
-        metaToken.content = accessToken; // Bearer는 이미 accessToken에 포함되어 있음
-        document.head.appendChild(metaToken);
-    }
-});
-
 async function refreshAccessToken() {
     // const refreshToken = localStorage.getItem('refreshToken');
     const refreshToken = getCookie('refreshToken');
@@ -23,8 +12,7 @@ async function refreshAccessToken() {
         const response = await fetch("/api/v1/token/refresh", {
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
-                "refresh_token": refreshToken
+                "Content-Type": "application/json"
             }
         });
 

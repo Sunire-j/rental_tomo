@@ -1,17 +1,13 @@
 function getNickname_getUserId(){
 
-    const accessToken = getCookie("accessToken");
-    const refreshToken = getCookie("refreshToken");
 
-    document.getElementById("accessTokenDisplay").textContent = accessToken ? accessToken : "엑세스 토큰이 없습니다.";
-    document.getElementById("refreshTokenDisplay").textContent = refreshToken ? refreshToken : "리프레시 토큰이 없습니다.";
+    document.getElementById("accessTokenDisplay").textContent = "엑세스 토큰이 없습니다.";
+    document.getElementById("refreshTokenDisplay").textContent = "리프레시 토큰이 없습니다.";
 
-    if (accessToken) {
+    if (1) {
         fetch("/api/v1/users/nickname", {
             method: "GET",
-            headers: {
-                "Authorization": accessToken // Bearer 토큰 사용
-            }
+            credentials: 'include' // 쿠키를 포함하도록 설정
         })
             .then(response => {
                 if (!response.ok) {
@@ -43,9 +39,7 @@ function getNickname_getUserId(){
 
         fetch("/api/v1/users/getId", {
             method: "GET",
-            headers: {
-                "Authorization": accessToken // Bearer 토큰 사용
-            }
+            credentials: 'include' // 쿠키를 포함하도록 설정
         })
             .then(response => {
                 if (!response.ok) {
@@ -90,9 +84,7 @@ function postTest(){
 
             fetch('/api/v1/reviews/write', {
                 method: 'POST',
-                headers: {
-                    'Authorization': token
-                },
+                credentials: 'include', // 쿠키를 포함하도록 설정
                 body: formData
             })
                 .then(response => {
@@ -125,8 +117,6 @@ function postTest(){
 
     });
 }
-
-
 
 document.addEventListener("DOMContentLoaded", getNickname_getUserId);
 document.addEventListener("DOMContentLoaded", postTest);

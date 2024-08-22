@@ -23,13 +23,12 @@ function login(){
             })
                 .then(response => {
                     if (!response.ok) {
+                        console.log(response);
                         throw new Error("로그인 실패");
                     }
                     return response.json(); // 응답을 JSON으로 처리
                 })
                 .then(tokens => {
-                    setCookie("accessToken","Bearer " + tokens.accessToken);
-                    setCookie("refreshToken", "Bearer " + tokens.refreshToken);
                     alert("로그인 성공: " + tokens.accessToken);
                     location.reload(); // 페이지 새로 고침
                 })

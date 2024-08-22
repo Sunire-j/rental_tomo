@@ -79,6 +79,8 @@ public class UserService {
     }
 
     public String nickname(String token) {
+        System.out.println("서비스에 닉네임 메서드 내부 토큰 ->");
+        System.out.println(token);
         if (token == null || !token.startsWith("Bearer ")) {
             throw new AppException(ErrorCode.TOKEN_NOT_FOUND, "토큰이 유효하지 않거나, 존재하지 않습니다.");
         }
