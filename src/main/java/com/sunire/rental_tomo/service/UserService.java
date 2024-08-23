@@ -139,10 +139,21 @@ public class UserService {
     public void updateUser(UserInfoEditRequest userInfoEditRequest){
         User user = userRepository.findById(userInfoEditRequest.getId()).orElse(null);
 
+        userRepository.findByNickname(userInfoEditRequest.getNickname())
+                .ifPresent(user_->{
+                    throw new AppException(ErrorCode.NICKNAME_DUPLICATED, userInfoEditRequest.getNickname()+"는 이미 있습니다.");
+                });
+
         user.setNickname(userInfoEditRequest.getNickname());
         user.setEmail(userInfoEditRequest.getEmail());
         user.setSns(userInfoEditRequest.getSns());
 
+        userRepository.save(user);
+    }
+
+    public void updatePwd(String password, Long id){
+        User user = userRepository.findById(id).orElse(null);
+        user.setPassword(bCryptPasswordEncoder.encode(password));
         userRepository.save(user);
     }
 }

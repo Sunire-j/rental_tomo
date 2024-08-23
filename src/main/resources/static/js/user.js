@@ -134,9 +134,6 @@ function join_insertUserInfo(){
                     const errorMessage = await response.text();
                     const [errorCode, message] = errorMessage.split('/');
 
-                    console.log(errorCode);
-                    console.log("####");
-                    console.log(message);
 
                     let formattedMessage = '';
 

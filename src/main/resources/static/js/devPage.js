@@ -23,9 +23,7 @@ function getNickname_getUserId(){
                                     getNickname_getUserId();
                                 }
                             }
-
                         })
-
                 }
                 return response.text();
             })

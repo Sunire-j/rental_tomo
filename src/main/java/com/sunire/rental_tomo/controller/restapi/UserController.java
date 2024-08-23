@@ -62,7 +62,7 @@ public class UserController {
             jwtTokenService.deleteRefreshToken(token);
         } catch (Exception e) {
             log.error("Delete refresh token failed");
-        }finally{
+        } finally {
             Cookie accessTokenCookie = CookieUtil.createCookie("accessToken", null, 0);
             Cookie refreshTokenCookie = CookieUtil.createCookie("refreshToken", null, 0);
 
@@ -94,12 +94,29 @@ public class UserController {
     }
 
     @PostMapping("/edit")
-    public ResponseEntity<String> edit(
+    public ResponseEntity<String> editInfo(
             @RequestBody UserInfoEditRequest userInfoEditRequest,
             HttpServletRequest request) {
+
+        //닉네임 중복 확인해야함.
+
         String token = CookieUtil.getCookie_Bearer(TokenName.ACCESS_TOKEN.getName(), request);
         Long id = userService.getPk(token);
         userInfoEditRequest.setId(id);
+        //여기서 저장을 안함
+        userService.updateUser(userInfoEditRequest);
+
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/edit_pwd")
+    public ResponseEntity<String> editPassword(
+            @RequestBody String password,
+            HttpServletRequest request) {
+
+        String token = CookieUtil.getCookie_Bearer(TokenName.ACCESS_TOKEN.getName(), request);
+        Long id = userService.getPk(token);
+        userService.updatePwd(password, id);
 
         return ResponseEntity.ok().build();
     }
