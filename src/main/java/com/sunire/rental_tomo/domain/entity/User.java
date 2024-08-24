@@ -46,6 +46,9 @@ public class User {
     @Column(name = "email", length = 100)
     private String email;
 
+    @Column(name="suspend_until")
+    private LocalDate suspendUntil;
+
     public enum Sex {
         M, F
     }
