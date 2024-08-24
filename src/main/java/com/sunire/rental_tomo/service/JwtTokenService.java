@@ -2,10 +2,10 @@ package com.sunire.rental_tomo.service;
 
 import com.sunire.rental_tomo.domain.entity.RefreshToken;
 import com.sunire.rental_tomo.repository.RefreshTokenRepository;
-import com.sunire.rental_tomo.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.Optional;
@@ -31,7 +31,9 @@ public class JwtTokenService {
         return refreshTokenRepository.findByToken(token);
     }
 
+    @Transactional
     public void deleteRefreshToken(String token) {
+        log.info("refresh token {}", token);
         refreshTokenRepository.deleteByToken(token);
     }
 }

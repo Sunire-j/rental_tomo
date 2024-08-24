@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="/js/cookie.js"></script>
+    <script src="/js/jquery-3.7.1.min.js"></script>
+    <script src="/js/jwtheader.js"></script>
+    <!--    <link rel="stylesheet" href="/css/bootstrap.min.css"/>-->
+    <link rel="stylesheet" href="/css/pico.fuchsia.min.css"/>
+    <link rel="stylesheet" href="/css/global.css"/>
+    <meta name="authToken" content="">
+    <script src="/js/mypage.js"></script>
+    <link rel="stylesheet" href="/css/mypage.css"/>
+    <title>Title</title>
+</head>
+<body>
+<main class="container">
+    <div th:replace="reusable/header.html::header(${isLogin}, ${username})"></div>
+    <nav aria-label="breadcrumb">
+        <ul>
+            <li><a href="/mypage"><h1>마이페이지</h1></a></li>
+            <li><a href="/mypage/edit"><h1>회원정보 수정</h1></a></li>
+            <li><a href="/mypage/deleteid"><h1>회원 탈퇴</h1></a></li>
+        </ul>
+    </nav>
+    <div class="image-section">
+        <img class="mypage-pic" src="/image/temp.png"/>
+        <!--    이미지 소스 경로 th로 넣어줘야함-->
+        <div>
+            <h3><strong th:text="${user.nickname}"></strong></h3>
+            <p>자기소개 자기소개 자기소개자기소개 자기소개 자기소개자기소개 자기소개 자기소개자기소개 자기소개 자기소개자기소개 자기소개 자기소개</p>
+        </div>
+    </div>
+
+    <div class="tnc">
+        어쩌고저쩌고 정산어쩌고 아무튼 동의합니까?
+    </div>
+    <label>
+        <input type="checkbox" name="valid" id="allowCheck" aria-invalid="false" onchange="checkConditions()"/>
+        동의함
+    </label>
+    <div class="nickname">
+        <label>
+            회원님의 닉네임을 입력해주세요.
+            <input type="text" name="nickname" id="nickname" onchange="checkConditions()" th:placeholder="${user.nickname}"/>
+        </label>
+    </div>
+
+    <div style="width: 100%">
+        <label class="finalCheck">
+            탈퇴를 원하시면 아래 슬라이드를 오른쪽 끝으로 이동해주세요.
+            <input type="range" id="finalCheck" onchange="checkConditions()" value="0" />
+        </label>
+    </div>
+
+
+    <input type="button" class="outline" id="deleteId" disabled value="회원 탈퇴" onclick=move_to_deleteId()>
+
+</main>
+
+</body>
+</html>

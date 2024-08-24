@@ -87,5 +87,32 @@ function editUserPwd() {
     }
 }
 
+function checkConditions() {
+    if(document.getElementById("allowCheck")) {
+
+
+        const allowCheck = document.getElementById('allowCheck').checked;
+        const nicknameInput = document.getElementById('nickname');
+        const finalCheck = document.getElementById('finalCheck').value;
+
+        // placeholder와 nickname의 value 비교
+        const placeholderValue = nicknameInput.placeholder;
+        const isNicknameValid = nicknameInput.value === placeholderValue;
+
+        // 조건 확인
+        const isButtonEnabled = allowCheck && isNicknameValid && finalCheck == 100;
+
+        // 버튼 활성화/비활성화
+        document.getElementById('deleteId').disabled = !isButtonEnabled;
+    }
+}
+
+function move_to_deleteId(){
+    if(confirm("확인 버튼을 선택하면, 탈퇴는 되돌릴 수 없습니다. 정말 진행하시겠습니까?")){
+        location.href="/mypage/deleteid2";
+    }
+}
+
 document.addEventListener("DOMContentLoaded", editUserInfo);
 document.addEventListener("DOMContentLoaded", editUserPwd);
+document.addEventListener("DOMContentLoaded", checkConditions);

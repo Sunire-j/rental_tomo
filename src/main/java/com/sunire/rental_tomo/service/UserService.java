@@ -156,4 +156,17 @@ public class UserService {
         user.setPassword(bCryptPasswordEncoder.encode(password));
         userRepository.save(user);
     }
+
+    public void deleteId(Long id) {
+        User user = userRepository.findById(id).orElse(null);
+        user.setPassword(key);
+        user.setSns(null);
+        user.setNickname("탈퇴한 회원");
+        user.setUserid(String.valueOf(user.getId()));
+        user.setProfilesrc(null);
+        user.setEmail("NOT EXIST");
+        user.setPhonenum("NOT EXIST");
+
+        userRepository.save(user);
+    }
 }

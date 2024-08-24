@@ -57,7 +57,7 @@ public class UserController {
 
     @GetMapping("/logout")
     public ResponseEntity<String> logout(HttpServletRequest request) {
-        String token = CookieUtil.getCookie_Bearer(TokenName.ACCESS_TOKEN.getName(), request);
+        String token = CookieUtil.getCookie(TokenName.REFRESH_TOKEN.getName(), request);
         try {
             jwtTokenService.deleteRefreshToken(token);
         } catch (Exception e) {
@@ -120,6 +120,8 @@ public class UserController {
 
         return ResponseEntity.ok().build();
     }
+
+
 }
 
 

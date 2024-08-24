@@ -17,6 +17,7 @@
     overflow: auto;
     border : 1.2px solid #f86cc0;
     padding : 50px;
+    border-radius: 8px;
 }
 .tnc_agree{
     margin-bottom: 50px;

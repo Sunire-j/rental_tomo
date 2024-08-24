@@ -8,3 +8,12 @@
     margin-bottom: 50px;
     display: flex;
 }
+
+.nickname{
+    margin-top: 30px;
+}
+
+.finalCheck{
+    max-width: 600px;
+    margin : 0 auto
+}
