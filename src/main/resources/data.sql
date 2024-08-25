@@ -1,0 +1,18 @@
+INSERT INTO rental_tomo.categories (category_id, category_name, parent_id) VALUES (1, '배틀그라운드(스팀)', 100);
+INSERT INTO rental_tomo.categories (category_id, category_name, parent_id) VALUES (2, '배틀그라운드(카카오)', 100);
+INSERT INTO rental_tomo.categories (category_id, category_name, parent_id) VALUES (3, '리그 오브 레전드', 100);
+INSERT INTO rental_tomo.categories (category_id, category_name, parent_id) VALUES (4, '전략적 팀 전투', 100);
+INSERT INTO rental_tomo.categories (category_id, category_name, parent_id) VALUES (5, 'PUBG:Mobile', 100);
+INSERT INTO rental_tomo.categories (category_id, category_name, parent_id) VALUES (6, '로스트아크', 100);
+INSERT INTO rental_tomo.categories (category_id, category_name, parent_id) VALUES (7, '발로란트', 100);
+INSERT INTO rental_tomo.categories (category_id, category_name, parent_id) VALUES (8, '데드 바이 데이라이트', 100);
+INSERT INTO rental_tomo.categories (category_id, category_name, parent_id) VALUES (9, '구스 구스 덕', 100);
+INSERT INTO rental_tomo.categories (category_id, category_name, parent_id) VALUES (10, '오버워치2', 100);
+INSERT INTO rental_tomo.categories (category_id, category_name, parent_id) VALUES (11, '폴가이즈', 100);
+INSERT INTO rental_tomo.categories (category_id, category_name, parent_id) VALUES (12, '테라리아', 100);
+INSERT INTO rental_tomo.categories (category_id, category_name, parent_id) VALUES (13, '마인크래프트', 100);
+INSERT INTO rental_tomo.categories (category_id, category_name, parent_id) VALUES (14, '그 외', 100);
+INSERT INTO rental_tomo.categories (category_id, category_name, parent_id) VALUES (15, '소통', 101);
+INSERT INTO rental_tomo.categories (category_id, category_name, parent_id) VALUES (16, '노래방', 101);
+INSERT INTO rental_tomo.categories (category_id, category_name, parent_id) VALUES (100, '게임류', null);
+INSERT INTO rental_tomo.categories (category_id, category_name, parent_id) VALUES (101, '오락류', null);

@@ -46,14 +46,21 @@ public class JwtController {
     public ResponseEntity<String> refreshToken(HttpServletRequest request) {
 
         String refreshToken = CookieUtil.getCookie(TokenName.REFRESH_TOKEN.getName(), request);
-        System.out.println(refreshToken);
         // 리프레시 토큰 검증
         RefreshToken storedRefreshToken = jwtTokenService.findByToken(refreshToken)
-                .orElseThrow(() -> new AppException(INVALID_REFRESH_TOKEN, "잘못된 접근"));
+                .orElse(null);
+        if(storedRefreshToken == null) {
+            return ResponseEntity
+                    .status(HttpStatus.FOUND)
+                    .location(URI.create("/api/v1/users/logout"))
+                    .build();
+        }
         //로그인 재시도로 유도해야함, 프론트가 할 일
         if (storedRefreshToken.getExpirationDate().before(new Date())) {
-            throw new AppException(REFRESH_TOKEN_EXPIRED, "로그인 만료");
-            //이것도 로그인 재시도로 유도, 프론트가 할 일
+            return ResponseEntity
+                    .status(HttpStatus.FOUND)
+                    .location(URI.create("/api/v1/users/logout"))
+                    .build();
         }
 
         String userId = JwtTokenUtil.getUserid(storedRefreshToken.getToken(), secretkey);

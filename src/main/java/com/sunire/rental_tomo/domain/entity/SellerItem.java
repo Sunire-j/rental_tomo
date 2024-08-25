@@ -28,7 +28,7 @@ public class SellerItem {
     private Category category;
 
     @Lob
-    @Column(name = "summary", nullable = false)
+    @Column(name = "summary", columnDefinition = "TEXT")
     private String summary;
 
 }

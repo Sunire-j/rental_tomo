@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="/js/cookie.js"></script>
+    <script src="/js/jquery-3.7.1.min.js"></script>
+    <script src="/js/jwtheader.js"></script>
+    <!--    <link rel="stylesheet" href="/css/bootstrap.min.css"/>-->
+    <link rel="stylesheet" href="/css/pico.fuchsia.min.css"/>
+    <link rel="stylesheet" href="/css/global.css"/>
+    <link rel="stylesheet" href="/css/mypage.css"/>
+    <link rel="stylesheet" href="/css/sellerPage.css"/>
+    <title>Title</title>
+</head>
+<body>
+<main class="container">
+    <div th:replace="reusable/header.html::header(${isLogin}, ${username})"></div>
+    <nav aria-label="breadcrumb">
+        <ul>
+            <li><a href="/seller"><h1>판매자센터</h1></a></li>
+        </ul>
+    </nav>
+    <div class="image-section">
+        <img class="mypage-pic" src="/image/temp.png"/>
+        <!--    이미지 소스 경로 th로 넣어줘야함-->
+        <div>
+            <h3><strong th:text="${user.nickname}"></strong></h3>
+            <p>자기소개 자기소개 자기소개자기소개 자기소개 자기소개자기소개 자기소개 자기소개자기소개 자기소개 자기소개자기소개 자기소개 자기소개</p>
+        </div>
+    </div>
+    <div role="group">
+        <!--    상단 메뉴 div, button이나 a태그로 구성-->
+        <button class="outline" onclick="location.href='/seller'">판매자 설정</button>
+        <button class="outline contrast" onclick="location.href='#'">빈칸</button>
+        <!--    정보수정에 회원탈퇴 들어갈거임-->
+        <button class="outline contrast" onclick="location.href='#'">빈칸</button>
+    </div>
+    <div class="article">
+        <!--  기본적으로 맨 위에 판매자가 될 것인지 온오프하는 스위치 있음
+         off에서 on으로 바꾸면 모달창 뜨고 확인버튼 누르면 온이 됨.
+         값이 바뀌면 api날려서 바뀐거 알려줘야하고, 리턴 잘 되면 아래쪽 disabled 다 풀어줘야함.
+         그 아래 정보 수정은 한번에 바꾸고 submit되도록 하기
+         -->
+
+        <label>
+            <input name="set-seller" type="checkbox" role="switch"/>
+            판매자 등록
+        </label>
+        <div class="checkboxs">
+            <hr/>
+            <!--          여기는 카테고리에 있는 것 반복해서 띄워주기-->
+            <h3 style="margin-top: 50px">카테고리 별 설정</h3>
+            <div class="parent" th:each="parent_ : ${parent}">
+                <h4 th:text="${parent_.categoryName}"></h4>
+                <div class="each-attr" th:each="children_ : ${children}">
+                    <div class="child grid" th:if="${children_.parent.id==parent_.id}">
+                        <div class="inner1">
+                            <input th:name="${children_.id}"
+                                   type="checkbox"
+                                   role="switch"/>
+                            <label th:for="${children_.id}" th:text="${children_.categoryName}">
+                            </label>
+                        </div>
+                        <div class="inner2">
+                            <input type="text" th:name="${children_.id}+_smy" placeholder="구매자에게 노출 될 문구를 작성해주세요"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</main>
+
+</body>
+</html>

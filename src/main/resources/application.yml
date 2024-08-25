@@ -8,6 +8,7 @@ spring:
     password: ${DB_PW}
     driver-class-name: com.mysql.cj.jdbc.Driver
 
+
   jpa:
     hibernate:
       ddl-auto: validate
@@ -15,6 +16,11 @@ spring:
 
   thymeleaf:
     cache: false
+  sql:
+    init:
+      data-locations: classpath:data.sql
+      mode: never
+
 
 jwt:
   token:
