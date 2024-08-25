@@ -1,6 +1,8 @@
 package com.sunire.rental_tomo.config;
 
+import com.sunire.rental_tomo.domain.entity.User;
 import com.sunire.rental_tomo.enumFile.TokenName;
+import com.sunire.rental_tomo.repository.UserRepository;
 import com.sunire.rental_tomo.service.UserService;
 import com.sunire.rental_tomo.utils.CookieUtil;
 import com.sunire.rental_tomo.utils.JwtTokenUtil;
@@ -27,7 +29,7 @@ import java.util.List;
 @Slf4j
 public class JwtFilter extends OncePerRequestFilter {
 
-    private final UserService userService;
+    private final UserRepository userRepository;
 
     @Value("${jwt.token.secret}")
     private final String secretKey;
@@ -57,8 +59,6 @@ public class JwtFilter extends OncePerRequestFilter {
                 //3. access도 만료인지 체크, 만료라면 refresh로 리디렉션
                 try {
                     if (!JwtTokenUtil.isExpired(token, secretKey)) {//token null체크 1에서 함
-                        //아무것도 없이 그냥 진행
-                        System.out.println("cool!");
                     }
 
                 } catch (ExpiredJwtException e) {
@@ -74,13 +74,13 @@ public class JwtFilter extends OncePerRequestFilter {
         }
         //expired 확인
 
-        //getUserid
-        String username = JwtTokenUtil.getUserid(token, secretKey);
-        log.info("username: {}", username);
+        //유저객체 뽑아오기
+        Long userpk = JwtTokenUtil.getUserPk(token, secretKey);
+        User user = userRepository.findById(userpk).orElse(null);
 
         //add auth
         UsernamePasswordAuthenticationToken auth =
-                new UsernamePasswordAuthenticationToken(username, null, List.of(new SimpleGrantedAuthority("ROLE_USER")));
+                new UsernamePasswordAuthenticationToken(user.getNickname(), null, List.of(new SimpleGrantedAuthority("ROLE_USER")));
 
         //detail
         auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));

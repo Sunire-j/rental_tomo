@@ -9,16 +9,23 @@ import org.hibernate.annotations.OnDeleteAction;
 import java.time.Instant;
 import java.util.Date;
 
-@Builder
 @Getter
+@Setter
 @Entity
+@Builder
+@RequiredArgsConstructor
 @AllArgsConstructor
-@NoArgsConstructor
 @Table(name = "refresh_token", schema = "rental_tomo")
 public class RefreshToken {
     @Id
-    @Column(name = "user_id", nullable = false, length = 45)
-    private String userId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "token_id", nullable = false)
+    private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @Column(name = "token", nullable = false)
     private String token;

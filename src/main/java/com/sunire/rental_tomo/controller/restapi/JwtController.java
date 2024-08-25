@@ -1,9 +1,11 @@
 package com.sunire.rental_tomo.controller.restapi;
 
 import com.sunire.rental_tomo.domain.entity.RefreshToken;
+import com.sunire.rental_tomo.domain.entity.User;
 import com.sunire.rental_tomo.enumFile.TokenName;
-import com.sunire.rental_tomo.exception.AppException;
+import com.sunire.rental_tomo.repository.UserRepository;
 import com.sunire.rental_tomo.service.JwtTokenService;
+import com.sunire.rental_tomo.service.UserService;
 import com.sunire.rental_tomo.utils.CookieUtil;
 import com.sunire.rental_tomo.utils.JwtTokenUtil;
 import jakarta.servlet.http.Cookie;
@@ -22,9 +24,6 @@ import java.net.URI;
 import java.util.Date;
 import java.util.Map;
 
-import static com.sunire.rental_tomo.exception.ErrorCode.INVALID_REFRESH_TOKEN;
-import static com.sunire.rental_tomo.exception.ErrorCode.REFRESH_TOKEN_EXPIRED;
-
 @RestController
 @RequiredArgsConstructor
 @Slf4j
@@ -32,6 +31,8 @@ import static com.sunire.rental_tomo.exception.ErrorCode.REFRESH_TOKEN_EXPIRED;
 public class JwtController {
 
     private final JwtTokenService jwtTokenService;
+    private final UserRepository userRepository;
+    private final UserService userService;
 
     @Value("${jwt.token.access_expiration}")
     private Long ACCESS_TOKEN_EXPIRATION;
@@ -46,6 +47,7 @@ public class JwtController {
     public ResponseEntity<String> refreshToken(HttpServletRequest request) {
 
         String refreshToken = CookieUtil.getCookie(TokenName.REFRESH_TOKEN.getName(), request);
+
         // 리프레시 토큰 검증
         RefreshToken storedRefreshToken = jwtTokenService.findByToken(refreshToken)
                 .orElse(null);
@@ -63,8 +65,10 @@ public class JwtController {
                     .build();
         }
 
-        String userId = JwtTokenUtil.getUserid(storedRefreshToken.getToken(), secretkey);
-        Map<String, String> token = JwtTokenUtil.createToken(userId, secretkey, ACCESS_TOKEN_EXPIRATION, REFRESH_TOKEN_EXPIRATION, jwtTokenService);
+        Long userpk = JwtTokenUtil.getUserPk(refreshToken, secretkey);
+        User user = userRepository.findById(userpk).orElse(null);
+
+        Map<String, String> token = JwtTokenUtil.createToken(user, secretkey, ACCESS_TOKEN_EXPIRATION, REFRESH_TOKEN_EXPIRATION, jwtTokenService);
 
         Cookie accessTokenCookie = new Cookie("accessToken", token.get("accessToken"));
         accessTokenCookie.setHttpOnly(true);

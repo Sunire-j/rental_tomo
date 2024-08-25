@@ -1,5 +1,6 @@
 package com.sunire.rental_tomo.config;
 
+import com.sunire.rental_tomo.repository.UserRepository;
 import com.sunire.rental_tomo.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,13 +22,13 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Slf4j
 public class SecurityConfig {
 
-    private final UserService userService;
+    private final UserRepository userRepository;
 
     @Value("${jwt.token.secret}")
     private String secretKey;
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, UserRepository userRepository) throws Exception {
 
         log.info("secretkey : {}", secretKey);
 
@@ -49,7 +50,7 @@ public class SecurityConfig {
                                         "/mypage/**", "/seller/**").authenticated()
                 )
                 .sessionManagement(config->config.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterBefore(new JwtFilter(userService, secretKey), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JwtFilter(userRepository, secretKey), UsernamePasswordAuthenticationFilter.class)
                 .build();
 
     }

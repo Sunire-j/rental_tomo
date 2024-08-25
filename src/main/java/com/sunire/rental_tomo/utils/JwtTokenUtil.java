@@ -1,5 +1,7 @@
 package com.sunire.rental_tomo.utils;
 
+import com.sunire.rental_tomo.domain.entity.User;
+import com.sunire.rental_tomo.repository.UserRepository;
 import com.sunire.rental_tomo.service.JwtTokenService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -13,10 +15,9 @@ import java.util.Map;
 public class JwtTokenUtil {
 
 
-
-    public static Map<String,String> createToken(String userid, String key, long expireTimeMs, long expireTimeMs_Refresh, JwtTokenService jwtTokenService) {
+    public static Map<String,String> createToken(User user, String key, long expireTimeMs, long expireTimeMs_Refresh, JwtTokenService jwtTokenService) {
         Claims claims = Jwts.claims();
-        claims.put("userid", userid);
+        claims.put("userid", user.getId());
 
         String accessToken = Jwts.builder()
                 .setClaims(claims)
@@ -40,7 +41,7 @@ public class JwtTokenUtil {
         Date refreshtokencreated = JwtTokenUtil.getCreatedDate(refreshToken, key);
 
         // 새로운 리프레시 토큰 DB에 저장
-        jwtTokenService.saveRefreshToken(userid, refreshToken, refreshtokenexpiration, refreshtokencreated);
+        jwtTokenService.saveRefreshToken(user, refreshToken, refreshtokenexpiration, refreshtokencreated);
 
         return token;
     }
@@ -52,11 +53,11 @@ public class JwtTokenUtil {
                         getExpiration().before(new Date());
     }
 
-    public static String getUserid(String token, String secretKey) {
+    public static Long getUserPk(String token, String secretKey) {
         return Jwts.parserBuilder().
                 setSigningKey(secretKey).build().
                 parseClaimsJws(token).getBody().
-                get("userid", String.class);
+                get("userid", Long.class);
     }
 
     public static Date getExpirationDate(String token, String key) {

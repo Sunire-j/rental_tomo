@@ -1,9 +1,15 @@
 package com.sunire.rental_tomo.domain.entity;
 
+import com.sunire.rental_tomo.domain.entity.SellerItem;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
 
 @Builder
 @Entity
@@ -48,6 +54,16 @@ public class User {
 
     @Column(name="suspend_until")
     private LocalDate suspendUntil;
+
+    @ColumnDefault("0")
+    @Column(name = "is_seller", nullable = false)
+    private Boolean isSeller = false;
+
+    @OneToMany(mappedBy = "user")
+    private List<SellerItem> sellerItems = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private Set<RefreshToken> refreshTokens = new LinkedHashSet<>();
 
     public enum Sex {
         M, F

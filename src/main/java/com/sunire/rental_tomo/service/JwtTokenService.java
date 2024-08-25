@@ -1,6 +1,7 @@
 package com.sunire.rental_tomo.service;
 
 import com.sunire.rental_tomo.domain.entity.RefreshToken;
+import com.sunire.rental_tomo.domain.entity.User;
 import com.sunire.rental_tomo.repository.RefreshTokenRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,13 +18,14 @@ public class JwtTokenService {
 
     private final RefreshTokenRepository refreshTokenRepository;
 
-    public void saveRefreshToken(String userId, String token, Date expirationDate, Date createdDate) {
+    public void saveRefreshToken(User user, String token, Date expirationDate, Date createdDate) {
         RefreshToken refreshToken = RefreshToken.builder()
-                .userId(userId)
+                .user(user)
                 .token(token)
                 .expirationDate(expirationDate)
                 .createdAt(createdDate)
                 .build();
+
         refreshTokenRepository.save(refreshToken);
     }
 

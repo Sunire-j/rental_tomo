@@ -79,8 +79,9 @@ public class UserService {
 
         //generate token and return
 
-        System.out.println("key is " +key);
-        return JwtTokenUtil.createToken(user.getUserid(), key,expireTimeMs, expireTimeMs_Refresh, jwtTokenService);
+
+
+        return JwtTokenUtil.createToken(user, key,expireTimeMs, expireTimeMs_Refresh, jwtTokenService);
     }
 
     public String nickname(String token) {
@@ -89,9 +90,10 @@ public class UserService {
         }
 
         String token_temp = token.substring(7);
-        String userid = JwtTokenUtil.getUserid(token_temp, key);
+        Long userpk = JwtTokenUtil.getUserPk(token_temp, key);
 
-        return userRepository.findByUserid(userid)
+
+        return userRepository.findById(userpk)
                 .map(user -> user.getNickname())
                 .orElseThrow(() -> new AppException(ErrorCode.USERNAME_NOT_FOUND, "사용자를 찾을 수 없습니다."));
     }
@@ -102,7 +104,10 @@ public class UserService {
         }
 
         String token_temp = token.substring(7);
-        return JwtTokenUtil.getUserid(token_temp, key);
+//        로그인하는 아이디를 얻는거겠지
+        Long userpk = JwtTokenUtil.getUserPk(token_temp, key);
+        User user = userRepository.findById(userpk).orElse(null);
+        return user.getUserid();
     }
 
     public String isLogin(HttpServletRequest request){
@@ -112,8 +117,8 @@ public class UserService {
             return null;
         }
         String token_temp = token.substring(7);
-        String userid = JwtTokenUtil.getUserid(token_temp, key);
-        Optional<User> user = userRepository.findByUserid(userid);
+        Long userpk = JwtTokenUtil.getUserPk(token_temp, key);
+        Optional<User> user = userRepository.findById(userpk);
         String username = user.map(User::getNickname).orElse(null);
 
         return username;
@@ -126,10 +131,9 @@ public class UserService {
 
         String token_temp = token.substring(7);
         //토큰꺼냄 로그인아이디니까 pk키를 구해야함
-        String userid = JwtTokenUtil.getUserid(token_temp, key);
-        User user = userRepository.findByUserid(userid).orElse(null);
+        Long userpk = JwtTokenUtil.getUserPk(token_temp, key);
 
-        return user.getId();
+        return userpk;
     }
 
     public Optional<User> userInfo(String name){
@@ -159,7 +163,7 @@ public class UserService {
 
     public void deleteId(Long id) {
         User user = userRepository.findById(id).orElse(null);
-        user.setPassword(key);
+        user.setPassword(bCryptPasswordEncoder.encode(key));
         user.setSns(null);
         user.setNickname("탈퇴한 회원");
         user.setUserid(String.valueOf(user.getId()));

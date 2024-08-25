@@ -2,7 +2,6 @@ package com.sunire.rental_tomo.controller.restapi;
 
 import com.sunire.rental_tomo.domain.dto.UserInfoEditRequest;
 import com.sunire.rental_tomo.domain.dto.UserJoinRequest;
-import com.sunire.rental_tomo.domain.entity.User;
 import com.sunire.rental_tomo.enumFile.TokenName;
 import com.sunire.rental_tomo.service.JwtTokenService;
 import com.sunire.rental_tomo.service.UserService;

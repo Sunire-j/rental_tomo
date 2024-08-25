@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import java.net.URI;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @Controller
 @RequiredArgsConstructor
@@ -161,7 +162,8 @@ public class HomeController {
     List<Category> parent = cat.get("parent");
     List<Category> children = cat.get("children");
 
-    List<SellerItem> items = sellerService.getUserSelling(user);
+    List<SellerItem> items = Objects.requireNonNull(user).getSellerItems();
+    System.out.println(items.toString());
     model.addAttribute("item", items);
     model.addAttribute("parent", parent);
     model.addAttribute("children", children);
