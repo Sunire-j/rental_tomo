@@ -155,6 +155,7 @@ public class HomeController {
         }
         User user = userService.userInfo(name).orElse(null);
         model.addAttribute("user", user);
+    System.out.println(user.getIsSeller());
 
         //여기에서 타임리프에 필요한걸 다 넣어줘야함.
     //카테고리도 불러와야함. 사유 : on해둔게 없으면 카테고리 이름 자체를 안들고있음
@@ -162,8 +163,7 @@ public class HomeController {
     List<Category> parent = cat.get("parent");
     List<Category> children = cat.get("children");
 
-    List<SellerItem> items = Objects.requireNonNull(user).getSellerItems();
-    System.out.println(items.toString());
+    List<SellerItem> items = sellerService.getUserSelling(user);
     model.addAttribute("item", items);
     model.addAttribute("parent", parent);
     model.addAttribute("children", children);

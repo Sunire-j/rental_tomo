@@ -1,15 +1,18 @@
 package com.sunire.rental_tomo.domain.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 @Getter
 @Setter
 @Entity
+@Builder
+@RequiredArgsConstructor
 @Table(name = "seller_item", schema = "rental_tomo")
+@AllArgsConstructor
 public class SellerItem {
 
     @Id
@@ -30,5 +33,9 @@ public class SellerItem {
     @Lob
     @Column(name = "summary", columnDefinition = "TEXT")
     private String summary;
+
+    @ColumnDefault("0")
+    @Column(name = "status", nullable = false)
+    private Boolean status = false;
 
 }

@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="/css/global.css"/>
     <link rel="stylesheet" href="/css/mypage.css"/>
     <link rel="stylesheet" href="/css/sellerPage.css"/>
+    <script src="/js/sellerPage.js"></script>
     <title>Title</title>
 </head>
 <body>
@@ -44,31 +45,39 @@
          -->
 
         <label>
-            <input name="set-seller" type="checkbox" role="switch"/>
+            <input id="set-seller" type="checkbox" role="switch" th:checked="${user.isSeller==true}"/>
             판매자 등록
         </label>
         <div class="checkboxs">
             <hr/>
             <!--          여기는 카테고리에 있는 것 반복해서 띄워주기-->
             <h3 style="margin-top: 50px">카테고리 별 설정</h3>
+            <h6 style="margin-bottom: 50px;">하단의 적용하기 버튼을 눌러야 적용됩니다.</h6>
             <div class="parent" th:each="parent_ : ${parent}">
                 <h4 th:text="${parent_.categoryName}"></h4>
-                <div class="each-attr" th:each="children_ : ${children}">
+                <div class="each-attr" th:each="children_ ,iterStat: ${children}">
+<!--                    <div th:text="${item[iterStat.index].status}"></div>-->
                     <div class="child grid" th:if="${children_.parent.id==parent_.id}">
                         <div class="inner1">
                             <input th:name="${children_.id}"
+                                   class="item-checkbox"
                                    type="checkbox"
-                                   role="switch"/>
+                                   role="switch"
+                                   th:attr="disabled=${!user.isSeller||item==null || item[iterStat.index].status==1} "
+                                   th:checked="${!(item==null || item[iterStat.index].status==0)}"
+                                   />
                             <label th:for="${children_.id}" th:text="${children_.categoryName}">
                             </label>
                         </div>
                         <div class="inner2">
-                            <input type="text" th:name="${children_.id}+_smy" placeholder="구매자에게 노출 될 문구를 작성해주세요"/>
+                            <input type="text" class="item-text" th:name="${children_.id}+_smy" th:attr="disabled=${!user.isSeller||item!=null||item[iterStat.index].status==1}" placeholder="구매자에게 노출 될 문구를 작성해주세요"/>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
+        <input type="button" id="apply" value="적용하기"/>
 
     </div>
 

@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface SellerItemRepository extends JpaRepository<SellerItem, Long> {
     List<SellerItem> findByUser(User user);
+    void deleteAllByUser(User user);
 }
