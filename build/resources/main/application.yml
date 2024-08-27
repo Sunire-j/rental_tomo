@@ -22,8 +22,8 @@ spring:
 
 
 
-#  thymeleaf:
-#    cache: true
+  thymeleaf:
+    cache: false
   sql:
     init:
       data-locations: classpath:data.sql

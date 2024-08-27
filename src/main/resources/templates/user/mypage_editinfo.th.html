@@ -28,7 +28,7 @@
         <!--    이미지 소스 경로 th로 넣어줘야함-->
         <div>
             <h3><strong th:text="${user.nickname}"></strong></h3>
-            <p>자기소개 자기소개 자기소개자기소개 자기소개 자기소개자기소개 자기소개 자기소개자기소개 자기소개 자기소개자기소개 자기소개 자기소개</p>
+            <p th:text="${user.introduce==null?'자기소개가 없습니다.':user.introduce}"></p>
         </div>
     </div>
     <div role="group">
@@ -45,6 +45,7 @@
                     <label>닉네임<input type="text" name="nickname" placeholder="닉네임" th:value="${user.nickname}"/></label>
                     <label>이메일<input type="email" name="email" placeholder="이메일" th:value="${user.email}"/></label>
                     <label>SNS<input type="text" name="sns" placeholder="SNS" th:value="${user.sns==null?'':user.sns}"/></label>
+                    <label>자기소개<textarea name="introduce" maxlength="500" placeholder="최대 500자" th:text="${user.introduce==null?'':user.introduce}"></textarea></label>
                 </fieldset>
                 <input type="submit" value="수정하기"/>
             </form>

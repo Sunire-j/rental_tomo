@@ -16,6 +16,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -143,14 +144,18 @@ public class UserService {
     public void updateUser(UserInfoEditRequest userInfoEditRequest){
         User user = userRepository.findById(userInfoEditRequest.getId()).orElse(null);
 
-        userRepository.findByNickname(userInfoEditRequest.getNickname())
-                .ifPresent(user_->{
-                    throw new AppException(ErrorCode.NICKNAME_DUPLICATED, userInfoEditRequest.getNickname()+"는 이미 있습니다.");
-                });
+        if(!Objects.equals(user.getNickname(), userInfoEditRequest.getNickname())){
+            userRepository.findByNickname(userInfoEditRequest.getNickname())
+                    .ifPresent(user_->{
+                        throw new AppException(ErrorCode.NICKNAME_DUPLICATED, userInfoEditRequest.getNickname()+"는 이미 있습니다.");
+                    });
+        }
+
 
         user.setNickname(userInfoEditRequest.getNickname());
         user.setEmail(userInfoEditRequest.getEmail());
         user.setSns(userInfoEditRequest.getSns());
+        user.setIntroduce(userInfoEditRequest.getIntroduce());
 
         userRepository.save(user);
     }

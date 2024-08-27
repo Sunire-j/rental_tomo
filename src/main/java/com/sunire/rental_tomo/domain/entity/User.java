@@ -65,6 +65,10 @@ public class User {
     @OneToMany(mappedBy = "user")
     private Set<RefreshToken> refreshTokens = new LinkedHashSet<>();
 
+    @Lob
+    @Column(name = "introduce", columnDefinition = "TEXT")
+    private String introduce;
+
     public enum Sex {
         M, F
     }

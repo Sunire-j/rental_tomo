@@ -29,7 +29,7 @@
         <!--    이미지 소스 경로 th로 넣어줘야함-->
         <div>
             <h3><strong th:text="${user.nickname}"></strong></h3>
-            <p>자기소개 자기소개 자기소개자기소개 자기소개 자기소개자기소개 자기소개 자기소개자기소개 자기소개 자기소개자기소개 자기소개 자기소개</p>
+            <p th:text="${user.introduce==null?'자기소개가 없습니다.':user.introduce}"></p>
         </div>
     </div>
 

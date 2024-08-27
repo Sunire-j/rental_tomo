@@ -37,7 +37,7 @@ public class HomeController {
     public String home(Model model, HttpServletRequest request) {
 
         String name = userService.isLogin(request);
-        if(name!=null){
+        if (name != null) {
             model = setLoginStatus.setLogin(model, name);
         }
         return "index.th.html";
@@ -46,7 +46,7 @@ public class HomeController {
     @GetMapping("/index")
     public String index(Model model, HttpServletRequest request) {
         String name = userService.isLogin(request);
-        if(name!=null){
+        if (name != null) {
             model = setLoginStatus.setLogin(model, name);
 
         }
@@ -56,7 +56,7 @@ public class HomeController {
     @GetMapping("/login")
     public String login(Model model, HttpServletRequest request) {
         String name = userService.isLogin(request);
-        if(name!=null){
+        if (name != null) {
             model = setLoginStatus.setLogin(model, name);
 
         }
@@ -66,7 +66,7 @@ public class HomeController {
     @GetMapping("/join/1")
     public String join(Model model, HttpServletRequest request) {
         String name = userService.isLogin(request);
-        if(name!=null){
+        if (name != null) {
             model = setLoginStatus.setLogin(model, name);
 
         }
@@ -76,7 +76,7 @@ public class HomeController {
     @GetMapping("/join/2")
     public String join2(Model model, HttpServletRequest request) {
         String name = userService.isLogin(request);
-        if(name!=null){
+        if (name != null) {
             model = setLoginStatus.setLogin(model, name);
 
         }
@@ -88,7 +88,7 @@ public class HomeController {
     @GetMapping("/mypage")
     public String mypage(Model model, HttpServletRequest request) {
         String name = userService.isLogin(request);
-        if(name!=null){
+        if (name != null) {
             model = setLoginStatus.setLogin(model, name);
         }
         User user = userService.userInfo(name).orElse(null);
@@ -102,11 +102,13 @@ public class HomeController {
     @GetMapping("/mypage/edit")
     public String mypage_edit(Model model, HttpServletRequest request) {
         String name = userService.isLogin(request);
-        if(name!=null){
+        if (name != null) {
             model = setLoginStatus.setLogin(model, name);
         }
         User user = userService.userInfo(name).orElse(null);
         model.addAttribute("user", user);
+
+        System.out.println("############"+user.getIntroduce());
 
 //        들어가야 하는 정보 아이디, 휴대폰번호, 성별, SNS, 닉네임, 이메일, 생일
         //자기소개 테이블 추가해야하고, 프로필사진 기능 추가하고 불러와야함
@@ -116,7 +118,7 @@ public class HomeController {
     @GetMapping("/mypage/deleteid")
     public String deleteid(Model model, HttpServletRequest request) {
         String name = userService.isLogin(request);
-        if(name!=null){
+        if (name != null) {
             model = setLoginStatus.setLogin(model, name);
         }
         User user = userService.userInfo(name).orElse(null);
@@ -144,34 +146,29 @@ public class HomeController {
     }
     //endregion
 
-
-
-//region 판매자센터
-@GetMapping("/seller")
+    //region 판매자센터
+    @GetMapping("/seller")
     public String seller(Model model, HttpServletRequest request) {
         String name = userService.isLogin(request);
-        if(name!=null){
+        if (name != null) {
             model = setLoginStatus.setLogin(model, name);
         }
         User user = userService.userInfo(name).orElse(null);
         model.addAttribute("user", user);
-    System.out.println(user.getIsSeller());
+        System.out.println("###############"+user.getIntroduce());
 
         //여기에서 타임리프에 필요한걸 다 넣어줘야함.
-    //카테고리도 불러와야함. 사유 : on해둔게 없으면 카테고리 이름 자체를 안들고있음
-    Map<String,List<Category>> cat = smallService.getAllCategories();
-    List<Category> parent = cat.get("parent");
-    List<Category> children = cat.get("children");
+        //카테고리도 불러와야함. 사유 : on해둔게 없으면 카테고리 이름 자체를 안들고있음
+        Map<String, List<Category>> cat = smallService.getAllCategories();
+        List<Category> parent = cat.get("parent");
+        List<Category> children = cat.get("children");
 
-    List<SellerItem> items = sellerService.getUserSelling(user);
-    model.addAttribute("item", items);
-    model.addAttribute("parent", parent);
-    model.addAttribute("children", children);
+        List<SellerItem> items = sellerService.getUserSelling(user);
+        model.addAttribute("item", items);
+        model.addAttribute("parent", parent);
+        model.addAttribute("children", children);
 
         return "seller/seller_intro.th.html";
     }
-
-
-
     //endregion
 }
