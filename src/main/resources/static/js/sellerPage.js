@@ -60,5 +60,18 @@ function changeItemAttr() {
     }
 }
 
+function sellerItemOnOff(checkbox) {
+    if (document.getElementsByClassName("checkboxs")) {
+        const inputName = checkbox.name + '_smy'; // children_.id + '_smy'
+        const inputField = document.querySelector(`input[name='${inputName}']`);
+        if (inputField) {
+            inputField.disabled = !checkbox.checked;
+            if (!checkbox.checked) {
+            }
+        }
+    }
+}
+
 document.addEventListener("DOMContentLoaded", changeSellerStatus);
 document.addEventListener("DOMContentLoaded", changeItemAttr);
+document.addEventListener("DOMContentLoaded", sellerItemOnOff);

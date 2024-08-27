@@ -63,14 +63,15 @@
                                    class="item-checkbox"
                                    type="checkbox"
                                    role="switch"
-                                   th:attr="disabled=${!user.isSeller||item==null || item[iterStat.index].status==1} "
-                                   th:checked="${!(item==null || item[iterStat.index].status==0)}"
+                                   th:attr="disabled=${!user.isSeller} "
+                                   th:checked="${item != null && item.size() > iterStat.index && item[iterStat.index].status}"
+                                   onclick="sellerItemOnOff(this)"
                                    />
                             <label th:for="${children_.id}" th:text="${children_.categoryName}">
                             </label>
                         </div>
                         <div class="inner2">
-                            <input type="text" class="item-text" th:name="${children_.id}+_smy" th:attr="disabled=${!user.isSeller||item!=null||item[iterStat.index].status==1}" placeholder="구매자에게 노출 될 문구를 작성해주세요"/>
+                            <input type="text" class="item-text" th:name="${children_.id}+_smy" th:attr="disabled=${!user.isSeller||item==null||!item[iterStat.index].status}" th:value="${(item != null && item.size() > iterStat.index)?item[iterStat.index].summary:''}" placeholder="구매자에게 노출 될 문구를 작성해주세요"/>
                         </div>
                     </div>
                 </div>

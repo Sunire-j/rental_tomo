@@ -11,6 +11,7 @@ import com.sunire.rental_tomo.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -43,11 +44,14 @@ public class SellerController {
         return ResponseEntity.ok(status.toString());
     }
 
+    @Transactional
     @PostMapping("/itemattrchange")
     public ResponseEntity<String> itemattrchange(@RequestBody Map<String, ItemAttrEditRequest> settings, HttpServletRequest request) {
 
         String name = userService.isLogin(request);
         User user = userService.userInfo(name).orElse(null);
+
+        sellerItemRepository.deleteAllByUser(user);
 
         settings.forEach((id, setting) -> {
             //잘 들어오는중
