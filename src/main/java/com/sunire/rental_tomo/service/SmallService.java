@@ -26,4 +26,6 @@ public class SmallService {
     public Optional<Category> getCategory(Long id) {
         return categoryRepository.findById(id);
     }
+
+
 }

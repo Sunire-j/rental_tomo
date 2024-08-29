@@ -13,7 +13,8 @@ public enum ErrorCode {
     NICKNAME_DUPLICATED(HttpStatus.CONFLICT, ""),
     TOKEN_NOT_FOUND(HttpStatus.UNAUTHORIZED, ""),
     REFRESH_TOKEN_EXPIRED(HttpStatus.UNAUTHORIZED, ""),
-    INVALID_REFRESH_TOKEN(HttpStatus.UNAUTHORIZED, "")
+    INVALID_REFRESH_TOKEN(HttpStatus.UNAUTHORIZED, ""),
+    DB_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, ""),
     ;
 
     private HttpStatus httpStatus;

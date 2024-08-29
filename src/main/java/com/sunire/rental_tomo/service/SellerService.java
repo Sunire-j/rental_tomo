@@ -24,7 +24,7 @@ public class SellerService {
 
 
     public List<SellerItem> getUserSelling(User user) {
-        return sellerItemRepository.findByUser(user);
+        return sellerItemRepository.findByUserOrderByCategory(user);
     }
 
     @Transactional

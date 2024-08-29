@@ -69,6 +69,12 @@ public class User {
     @Column(name = "introduce", columnDefinition = "TEXT")
     private String introduce;
 
+    @OneToMany(mappedBy = "follower")
+    private Set<Follow> follower = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "followed")
+    private Set<Follow> followed = new LinkedHashSet<>();
+
     public enum Sex {
         M, F
     }

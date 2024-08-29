@@ -88,7 +88,7 @@ function editUserPwd() {
 }
 
 function checkConditions() {
-    if(document.getElementById("allowCheck")) {
+    if (document.getElementById("allowCheck")) {
 
 
         const allowCheck = document.getElementById('allowCheck').checked;
@@ -107,12 +107,62 @@ function checkConditions() {
     }
 }
 
-function move_to_deleteId(){
-    if(confirm("확인 버튼을 선택하면, 탈퇴는 되돌릴 수 없습니다. 정말 진행하시겠습니까?")){
-        location.href="/mypage/deleteid2";
+function move_to_deleteId() {
+    if (confirm("확인 버튼을 선택하면, 탈퇴는 되돌릴 수 없습니다. 정말 진행하시겠습니까?")) {
+        location.href = "/mypage/deleteid2";
+    }
+}
+
+function buttonLink() {
+    if (document.getElementsByClassName("menu")) {
+        const menudom = document.querySelector('menu');
+        const userid = menudom.getAttribute("name");
+
+        const info = menudom.querySelector('button:nth-child(1)');
+        const edit = menudom.querySelector('button:nth-child(2)');
+        const favo = menudom.querySelector('button:nth-child(3)');
+
+        info.addEventListener('click', function(){
+            location.href='/info/'+userid;
+        });
+        edit.addEventListener('click', function(){
+            location.href='/info/item/'+userid;
+        });
+        favo.addEventListener('click', function(){
+            location.href='#';
+        })
+    }
+}
+
+function changeFollow(status, uid){
+    if(document.getElementsByClassName("follow")){
+        const followBtn = document.getElementsByClassName("follow");
+        followBtn.addEventListener('click', async function () {
+            const jsonObject = {"userid": uid}
+            const jsonString = JSON.stringify(jsonObject);
+            var url = status == "add" ? "/api/v1/users/follow" : "/api/v1/users/unfollow";
+            const response = await fetch(url,
+                {
+                    method: 'post',
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: jsonString
+                });
+            if(!response.ok){
+                alert("알 수 없는 오류 발생");
+            }else{
+                alert("성공하였습니다.");
+                location.reload();
+            }
+
+        })
     }
 }
 
 document.addEventListener("DOMContentLoaded", editUserInfo);
 document.addEventListener("DOMContentLoaded", editUserPwd);
 document.addEventListener("DOMContentLoaded", checkConditions);
+document.addEventListener("DOMContentLoaded", buttonLink);
+document.addEventListener("DOMContentLoaded", changeFollow);

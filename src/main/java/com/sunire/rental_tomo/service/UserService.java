@@ -141,6 +141,10 @@ public class UserService {
         return userRepository.findByNickname(name);
     }
 
+    public Optional<User> userInfoWithUserId(String userid){
+        return userRepository.findByUserid(userid);
+    }
+
     public void updateUser(UserInfoEditRequest userInfoEditRequest){
         User user = userRepository.findById(userInfoEditRequest.getId()).orElse(null);
 

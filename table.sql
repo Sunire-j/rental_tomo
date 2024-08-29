@@ -25,8 +25,25 @@ create table user
     email         varchar(100)         not null,
     suspend_until date                 null,
     is_seller     tinyint(1) default 0 not null,
+    introduce     text                 null,
     constraint idx_userid
         unique (userid)
+);
+
+create table follow
+(
+    id       bigint auto_increment
+        primary key,
+    follower bigint not null,
+    followed bigint not null,
+    constraint unique_follow
+        unique (follower, followed),
+    constraint fk_followed
+        foreign key (followed) references user (id)
+            on delete cascade,
+    constraint fk_follower
+        foreign key (follower) references user (id)
+            on delete cascade
 );
 
 create table refresh_token
@@ -46,9 +63,10 @@ create table seller_item
 (
     content_id  bigint auto_increment
         primary key,
-    user_id     bigint not null,
-    category_id bigint not null,
-    summary     text   null,
+    user_id     bigint               not null,
+    category_id bigint               not null,
+    summary     text                 null,
+    status      tinyint(1) default 0 not null,
     constraint seller_item_ibfk_1
         foreign key (user_id) references user (id)
             on delete cascade,

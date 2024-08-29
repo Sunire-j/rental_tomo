@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="/js/cookie.js"></script>
+    <script src="/js/jquery-3.7.1.min.js"></script>
+    <script src="/js/jwtheader.js"></script>
+    <!--    <link rel="stylesheet" href="/css/bootstrap.min.css"/>-->
+    <link rel="stylesheet" href="/css/pico.fuchsia.min.css"/>
+    <link rel="stylesheet" href="/css/global.css"/>
+    <meta name="authToken" content="">
+    <script src="/js/mypage.js"></script>
+    <link rel="stylesheet" href="/css/sellerPage.css"/>
+    <link rel="stylesheet" href="/css/mypage.css"/>
+    <title>Title</title>
+</head>
+<body>
+<main class="container">
+    <div th:replace="reusable/header.html::header(${isLogin}, ${username})"></div>
+    <nav aria-label="breadcrumb">
+        <ul>
+            <li><a th:href="'/info/'+${another.userid}"><h1 th:text="${another.nickname}+'의 페이지'"></h1></a></li>
+        </ul>
+    </nav>
+    <div class="image-section">
+        <img class="mypage-pic" src="/image/temp.png"/>
+        <!--    이미지 소스 경로 th로 넣어줘야함-->
+        <div>
+            <div>
+                <h3><strong th:text="${another.nickname}"></strong></h3>
+                <p th:text="${another.introduce==null?'자기소개가 없습니다.':another.introduce}"></p>
+            </div>
+        </div>
+    </div>
+    <button class="follow">팔로우</button>
+    <div class="menu" role="group" th:name="${another.userid}">
+        <!--    상단 메뉴 div, button이나 a태그로 구성-->
+        <button class="outline" th:text="${another.nickname}+'의 정보'"></button>
+        <button class="outline contrast">판매 상품</button>
+        <!--    정보수정에 회원탈퇴 들어갈거임-->
+        <button class="outline contrast">즐겨찾기 목록</button>
+    </div>
+    <div class="grid">
+        <!--    회원정보 보여주는 div-->
+        <div class="left">
+            <label>
+                성별
+                <p><Strong th:text="${another.sex}"></Strong></p>
+            </label>
+            <!--      아이디, 휴대폰번호, 성별, SNS-->
+        </div>
+        <div class="right">
+            <label>
+                생년월일
+                <p><Strong th:text="${another.birth}"></Strong></p>
+            </label>
+        </div>
+    </div>
+
+</main>
+
+</body>
+</html>

@@ -53,8 +53,8 @@
             <!--          여기는 카테고리에 있는 것 반복해서 띄워주기-->
             <h3 style="margin-top: 50px">카테고리 별 설정</h3>
             <h6 style="margin-bottom: 50px;">하단의 적용하기 버튼을 눌러야 적용됩니다.</h6>
-            <div class="parent" th:each="parent_ : ${parent}">
-                <h4 th:text="${parent_.categoryName}"></h4>
+            <details class="parent" th:each="parent_ : ${parent}">
+                <summary role="button" th:text="${parent_.categoryName}"></summary>
                 <div class="each-attr" th:each="children_ ,iterStat: ${children}">
 <!--                    <div th:text="${item[iterStat.index].status}"></div>-->
                     <div class="child grid" th:if="${children_.parent.id==parent_.id}">
@@ -75,7 +75,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </details>
         </div>
 
         <input type="button" id="apply" value="적용하기"/>

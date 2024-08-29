@@ -2,7 +2,9 @@ package com.sunire.rental_tomo.controller.restapi;
 
 import com.sunire.rental_tomo.domain.dto.UserInfoEditRequest;
 import com.sunire.rental_tomo.domain.dto.UserJoinRequest;
+import com.sunire.rental_tomo.domain.entity.User;
 import com.sunire.rental_tomo.enumFile.TokenName;
+import com.sunire.rental_tomo.service.FollowService;
 import com.sunire.rental_tomo.service.JwtTokenService;
 import com.sunire.rental_tomo.service.UserService;
 import com.sunire.rental_tomo.utils.CookieUtil;
@@ -28,6 +30,7 @@ public class UserController {
 
     private final UserService userService;
     private final JwtTokenService jwtTokenService;
+    private final FollowService followService;
 
     @PostMapping("/join")
     public ResponseEntity<String> join(@RequestBody UserJoinRequest userJoinRequest) {
@@ -116,6 +119,46 @@ public class UserController {
         String token = CookieUtil.getCookie_Bearer(TokenName.ACCESS_TOKEN.getName(), request);
         Long id = userService.getPk(token);
         userService.updatePwd(password, id);
+
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/follow")
+    public ResponseEntity<String> follow(HttpServletRequest request, String userid) {
+        String token = CookieUtil.getCookie_Bearer(TokenName.ACCESS_TOKEN.getName(), request);
+        String uid = userService.getId(token);
+        User follower = userService.userInfoWithUserId(uid).orElse(null);
+        //id는 팔로우 하는 사람의 아이디
+        User followed = userService.userInfoWithUserId(userid).orElse(null);
+
+        if(follower==null || followed==null) {
+            return ResponseEntity
+                    .status(HttpStatus.FOUND)
+                    .location(URI.create("/"))
+                    .build();
+        }
+
+        Boolean result = followService.addFollow(follower, followed);
+
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/unfollow")
+    public ResponseEntity<String> unFollow(HttpServletRequest request, String userid){
+        String token = CookieUtil.getCookie_Bearer(TokenName.ACCESS_TOKEN.getName(), request);
+        String uid = userService.getId(token);
+        User follower = userService.userInfoWithUserId(uid).orElse(null);
+        //id는 팔로우 하는 사람의 아이디
+        User followed = userService.userInfoWithUserId(userid).orElse(null);
+
+        if(follower==null || followed==null) {
+            return ResponseEntity
+                    .status(HttpStatus.FOUND)
+                    .location(URI.create("/"))
+                    .build();
+        }
+
+        Boolean result = followService.unfollow(follower, followed);
 
         return ResponseEntity.ok().build();
     }

@@ -17,6 +17,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.net.URI;
 import java.util.List;
@@ -155,7 +157,6 @@ public class HomeController {
         }
         User user = userService.userInfo(name).orElse(null);
         model.addAttribute("user", user);
-        System.out.println("###############"+user.getIntroduce());
 
         //여기에서 타임리프에 필요한걸 다 넣어줘야함.
         //카테고리도 불러와야함. 사유 : on해둔게 없으면 카테고리 이름 자체를 안들고있음
@@ -169,6 +170,54 @@ public class HomeController {
         model.addAttribute("children", children);
 
         return "seller/seller_intro.th.html";
+    }
+    //endregion
+
+    //region 타 유저 정보
+    @GetMapping("/info")
+    public ResponseEntity<String> info_blank(Model model, HttpServletRequest request) {
+        return ResponseEntity
+                .status(HttpStatus.FOUND)
+                .location(URI.create("/"))
+                .build();
+    }
+
+    @GetMapping("/info/{userid}")
+    public String info(Model model, HttpServletRequest request, @PathVariable(value = "userid") String userid) {
+        String name = userService.isLogin(request);
+        if (name != null) {
+            model = setLoginStatus.setLogin(model, name);
+        }
+        User user = userService.userInfo(name).orElse(null);
+        model.addAttribute("user", user);
+
+        //이제 타 유저 정보와 타 유저의 seller_item을 보내야함
+        User another = userService.userInfoWithUserId(userid).orElse(null);
+        List<SellerItem> item = sellerService.getUserSelling(another);
+
+        model.addAttribute("another", another);
+        model.addAttribute("item", item);
+
+        return "user/other_info.th.html";
+    }
+
+    @GetMapping("/info/item/{userid}")
+    public String info_item(Model model, HttpServletRequest request, @PathVariable(value = "userid") String userid){
+        String name = userService.isLogin(request);
+        if (name != null) {
+            model = setLoginStatus.setLogin(model, name);
+        }
+        User user = userService.userInfo(name).orElse(null);
+        model.addAttribute("user", user);
+
+        //이제 타 유저 정보와 타 유저의 seller_item을 보내야함
+        User another = userService.userInfoWithUserId(userid).orElse(null);
+        List<SellerItem> item = sellerService.getUserSelling(another);
+
+        model.addAttribute("another", another);
+        model.addAttribute("items", item);
+
+        return "user/other_item.th.html";
     }
     //endregion
 }
