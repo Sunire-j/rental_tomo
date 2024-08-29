@@ -115,7 +115,7 @@ function move_to_deleteId() {
 
 function buttonLink() {
     if (document.getElementsByClassName("menu")) {
-        const menudom = document.querySelector('menu');
+        const menudom = document.querySelector('.menu');
         const userid = menudom.getAttribute("name");
 
         const info = menudom.querySelector('button:nth-child(1)');
@@ -134,13 +134,16 @@ function buttonLink() {
     }
 }
 
-function changeFollow(status, uid){
-    if(document.getElementsByClassName("follow")){
-        const followBtn = document.getElementsByClassName("follow");
+function changeFollow(){
+    if(document.getElementById("follow")){
+        const followBtn = document.getElementById("follow");
+
+        const status = followBtn.textContent=="팔로우"?"add":"delete";
+        const uid = document.getElementById('userid').value;
         followBtn.addEventListener('click', async function () {
             const jsonObject = {"userid": uid}
             const jsonString = JSON.stringify(jsonObject);
-            var url = status == "add" ? "/api/v1/users/follow" : "/api/v1/users/unfollow";
+            var url = status == "add" ? "/api/v1/users/follow/addfollow" : "/api/v1/users/follow/unfollow";
             const response = await fetch(url,
                 {
                     method: 'post',

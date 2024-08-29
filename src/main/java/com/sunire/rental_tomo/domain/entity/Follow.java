@@ -11,6 +11,7 @@ import org.hibernate.annotations.OnDeleteAction;
 @Builder
 @RequiredArgsConstructor
 @Table(name = "follow", schema = "rental_tomo")
+@AllArgsConstructor
 public class Follow {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

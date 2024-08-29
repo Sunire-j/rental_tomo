@@ -123,13 +123,17 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/follow")
-    public ResponseEntity<String> follow(HttpServletRequest request, String userid) {
+    @PostMapping("/follow/addfollow")
+    public ResponseEntity<String> follow(HttpServletRequest request, @RequestBody Map<String, String> json) {
+        String userid = json.get("userid");
         String token = CookieUtil.getCookie_Bearer(TokenName.ACCESS_TOKEN.getName(), request);
         String uid = userService.getId(token);
         User follower = userService.userInfoWithUserId(uid).orElse(null);
         //id는 팔로우 하는 사람의 아이디
         User followed = userService.userInfoWithUserId(userid).orElse(null);
+
+        //매개변수로 userid가 null로 들어오는중.
+
 
         if(follower==null || followed==null) {
             return ResponseEntity
@@ -143,8 +147,9 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/unfollow")
-    public ResponseEntity<String> unFollow(HttpServletRequest request, String userid){
+    @PostMapping("/follow/unfollow")
+    public ResponseEntity<String> unFollow(HttpServletRequest request, @RequestBody Map<String, String> json){
+        String userid = json.get("userid");
         String token = CookieUtil.getCookie_Bearer(TokenName.ACCESS_TOKEN.getName(), request);
         String uid = userService.getId(token);
         User follower = userService.userInfoWithUserId(uid).orElse(null);

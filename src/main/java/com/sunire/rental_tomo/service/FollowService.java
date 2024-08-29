@@ -9,6 +9,7 @@ import com.sunire.rental_tomo.repository.FollowRepository;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -31,10 +32,12 @@ public class FollowService {
         return true;
     }
 
+    @Transactional
     public Boolean unfollow(User follower, User followed) {
         try{
             followRepository.deleteByFollowerAndFollowed(follower, followed);
         }catch(Exception e){
+            System.out.println("오류"+ e);
             throw new AppException(ErrorCode.DB_ERROR, "알 수 없는 오류 발생");
         }
         return true;
@@ -48,6 +51,11 @@ public class FollowService {
     public int getFollowerCount(User followed){
         return followRepository.countByFollower(followed);
         //나(특정 사람)를 팔로우하는 사람 수를 세는거라 followed
+    }
+
+    public boolean isFollow(User follower, User followed) {
+        int count = followRepository.countByFollowedAndFollower(followed, follower);
+        return count != 0;
     }
 
 }

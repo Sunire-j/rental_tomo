@@ -4,10 +4,7 @@ import com.sunire.rental_tomo.domain.entity.Category;
 import com.sunire.rental_tomo.domain.entity.SellerItem;
 import com.sunire.rental_tomo.domain.entity.User;
 import com.sunire.rental_tomo.enumFile.TokenName;
-import com.sunire.rental_tomo.service.JwtTokenService;
-import com.sunire.rental_tomo.service.SellerService;
-import com.sunire.rental_tomo.service.SmallService;
-import com.sunire.rental_tomo.service.UserService;
+import com.sunire.rental_tomo.service.*;
 import com.sunire.rental_tomo.utils.CookieUtil;
 import com.sunire.rental_tomo.utils.setLoginStatus;
 import jakarta.servlet.http.HttpServletRequest;
@@ -33,6 +30,7 @@ public class HomeController {
     private final SellerService sellerService;
     private final JwtTokenService jwtTokenService;
     private final SmallService smallService;
+    private final FollowService followService;
 
     //region 회원가입,로그인,메인페이지
     @GetMapping("/")
@@ -191,12 +189,16 @@ public class HomeController {
         User user = userService.userInfo(name).orElse(null);
         model.addAttribute("user", user);
 
-        //이제 타 유저 정보와 타 유저의 seller_item을 보내야함
         User another = userService.userInfoWithUserId(userid).orElse(null);
-        List<SellerItem> item = sellerService.getUserSelling(another);
-
         model.addAttribute("another", another);
-        model.addAttribute("item", item);
+
+        if(user==another){
+            return "redirect:/mypage";
+        }
+
+        //팔로우 유무
+        boolean isFollow = followService.isFollow(user, another);
+        model.addAttribute("isFollow", isFollow);
 
         return "user/other_info.th.html";
     }
