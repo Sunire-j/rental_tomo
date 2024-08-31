@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="/js/cookie.js"></script>
+    <script src="/js/jquery-3.7.1.min.js"></script>
+    <script src="/js/jwtheader.js"></script>
+    <!--    <link rel="stylesheet" href="/css/bootstrap.min.css"/>-->
+    <link rel="stylesheet" href="/css/pico.fuchsia.min.css"/>
+    <link rel="stylesheet" href="/css/global.css"/>
+    <meta name="authToken" content="">
+    <script src="/js/mypage.js"></script>
+    <link rel="stylesheet" href="/css/sellerPage.css"/>
+    <link rel="stylesheet" href="/css/mypage.css"/>
+    <title>Title</title>
+</head>
+<body>
+<main class="container">
+    <div th:replace="reusable/header.html::header(${isLogin}, ${username})"></div>
+    <nav aria-label="breadcrumb">
+        <ul>
+            <li th:if="${user.id!=target.id}"><a th:href="'/info/'+${target.userid}"><h1 th:text="${target.nickname}+'의 페이지'"></h1></a></li>
+            <li th:if="${user.id!=target.id}"><a th:href="'/follower/'+${target.userid}"><h1 th:text="${title}+' 목록'"></h1></a> </li>
+        </ul>
+    </nav>
+    <div class="image-section">
+        <img class="mypage-pic" src="/image/temp.png"/>
+        <!--    이미지 소스 경로 th로 넣어줘야함-->
+        <div>
+            <div>
+                <h3><strong th:text="${target.nickname}"></strong></h3>
+                <p th:text="${target.introduce==null?'자기소개가 없습니다.':target.introduce}"></p>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <div th:each="follower_:${follower}" class="each-follow">
+            <img class="follow-pic" src="/image/temp.png"/>
+            <a th:href="'/info/'+${follower_.follower.userid}" th:text="${follower_.follower.nickname}"></a>
+        </div>
+    </div>
+
+</main>
+
+</body>
+</html>

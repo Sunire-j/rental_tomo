@@ -6,10 +6,13 @@ import com.sunire.rental_tomo.domain.entity.User;
 import com.sunire.rental_tomo.exception.AppException;
 import com.sunire.rental_tomo.exception.ErrorCode;
 import com.sunire.rental_tomo.repository.FollowRepository;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -43,19 +46,24 @@ public class FollowService {
         return true;
     }
 
-    public int getFollowedCount(User follower) {
-        return followRepository.countByFollowed(follower);
-        //내(특정 사람)가 팔로우중인 사람 수를 세는거라서 매개변수는 follower
-    }
-
-    public int getFollowerCount(User followed){
-        return followRepository.countByFollower(followed);
-        //나(특정 사람)를 팔로우하는 사람 수를 세는거라 followed
-    }
-
     public boolean isFollow(User follower, User followed) {
         int count = followRepository.countByFollowedAndFollower(followed, follower);
         return count != 0;
+    }
+
+    public Map<String, Integer> getAllFollowCount(User user){
+        Map<String, Integer> map = new HashMap<>();
+        map.put("followed", followRepository.countByFollower(user));
+        map.put("follower", followRepository.countByFollowed(user));
+        return map;
+    }
+
+    public List<Follow> getFollowerList(User user){
+        return followRepository.findByFollowed(user);
+    }
+
+    public List<Follow> getFollowedList(User user){
+        return followRepository.findByFollower(user);
     }
 
 }

@@ -33,6 +33,10 @@
       <a href="/seller">판매자 센터</a>
     </div>
   </div>
+  <div class="grid">
+    <a class="follow_cnt" th:href="${'/follow/follower/'+user.userid}" th:text="${'팔로워 '+follow_cnt.follower}"></a>
+    <a class="follow_cnt" th:href="${'/follow/followed/'+user.userid}" th:text="${'팔로우 '+follow_cnt.followed}"></a>
+  </div>
   <div role="group">
 <!--    상단 메뉴 div, button이나 a태그로 구성-->
     <button class="outline" onclick="location.href='/mypage'">내 정보</button>

@@ -1,6 +1,7 @@
 package com.sunire.rental_tomo.controller;
 
 import com.sunire.rental_tomo.domain.entity.Category;
+import com.sunire.rental_tomo.domain.entity.Follow;
 import com.sunire.rental_tomo.domain.entity.SellerItem;
 import com.sunire.rental_tomo.domain.entity.User;
 import com.sunire.rental_tomo.enumFile.TokenName;
@@ -94,6 +95,9 @@ public class HomeController {
         User user = userService.userInfo(name).orElse(null);
         model.addAttribute("user", user);
 
+        Map<String, Integer> follow_cnt = followService.getAllFollowCount(user);
+        model.addAttribute("follow_cnt", follow_cnt);
+
 //        들어가야 하는 정보 아이디, 휴대폰번호, 성별, SNS, 닉네임, 이메일, 생일
         //자기소개 테이블 추가해야하고, 프로필사진 기능 추가하고 불러와야함
         return "user/mypage_intro.th.html";
@@ -108,7 +112,8 @@ public class HomeController {
         User user = userService.userInfo(name).orElse(null);
         model.addAttribute("user", user);
 
-        System.out.println("############"+user.getIntroduce());
+        Map<String, Integer> follow_cnt = followService.getAllFollowCount(user);
+        model.addAttribute("follow_cnt", follow_cnt);
 
 //        들어가야 하는 정보 아이디, 휴대폰번호, 성별, SNS, 닉네임, 이메일, 생일
         //자기소개 테이블 추가해야하고, 프로필사진 기능 추가하고 불러와야함
@@ -192,7 +197,7 @@ public class HomeController {
         User another = userService.userInfoWithUserId(userid).orElse(null);
         model.addAttribute("another", another);
 
-        if(user==another){
+        if (user == another) {
             return "redirect:/mypage";
         }
 
@@ -200,11 +205,15 @@ public class HomeController {
         boolean isFollow = followService.isFollow(user, another);
         model.addAttribute("isFollow", isFollow);
 
+        //팔로워, 팔로우 수
+        Map<String, Integer> follow_cnt = followService.getAllFollowCount(another);
+        model.addAttribute("follow_cnt", follow_cnt);
+
         return "user/other_info.th.html";
     }
 
     @GetMapping("/info/item/{userid}")
-    public String info_item(Model model, HttpServletRequest request, @PathVariable(value = "userid") String userid){
+    public String info_item(Model model, HttpServletRequest request, @PathVariable(value = "userid") String userid) {
         String name = userService.isLogin(request);
         if (name != null) {
             model = setLoginStatus.setLogin(model, name);
@@ -222,4 +231,61 @@ public class HomeController {
         return "user/other_item.th.html";
     }
     //endregion
+
+    //region 팔로우,팔로워 목록
+
+    @GetMapping("/follow/follower/{userid}")
+    public String follower(Model model, HttpServletRequest request, @PathVariable(value = "userid") String userid) {
+        String name = userService.isLogin(request);
+        if (name != null) {
+            model = setLoginStatus.setLogin(model, name);
+        }
+        User user = userService.userInfo(name).orElse(null);
+        model.addAttribute("user", user);
+
+        User target;
+        if(Objects.equals(userid, user.getUserid())){
+            target=user;
+        }else{
+            target=userService.userInfoWithUserId(userid).orElse(null);
+        }
+        List<Follow> follower = followService.getFollowerList(target);
+        model.addAttribute("target", target);
+        model.addAttribute("follower",follower);
+        model.addAttribute("title", "팔로워");
+
+        return "user/follower.th.html";
+    }
+
+    @GetMapping("/follow/followed/{userid}")
+    public String followed(Model model, HttpServletRequest request, @PathVariable(value = "userid") String userid) {
+        String name = userService.isLogin(request);
+        if (name != null) {
+            model = setLoginStatus.setLogin(model, name);
+        }
+        User user = userService.userInfo(name).orElse(null);
+        model.addAttribute("user", user);
+
+        User target;
+        if(Objects.equals(userid, user.getUserid())){
+            target=user;
+        }else{
+            target=userService.userInfoWithUserId(userid).orElse(null);
+        }
+        List<Follow> followed = followService.getFollowedList(target);
+        model.addAttribute("target", target);
+        model.addAttribute("follower",followed);
+        model.addAttribute("title", "팔로우");
+
+        return "user/follower.th.html";
+    }
+
+    //endregion
+
+//    String name = userService.isLogin(request);
+//        if (name != null) {
+//        model = setLoginStatus.setLogin(model, name);
+//    }
+//    User user = userService.userInfo(name).orElse(null);
+//        model.addAttribute("user", user);
 }

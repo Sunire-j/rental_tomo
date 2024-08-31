@@ -33,6 +33,10 @@
             </div>
         </div>
     </div>
+    <div class="grid">
+        <a class="follow_cnt" th:href="${'/follow/follower/'+another.userid}" th:text="${'팔로워 '+follow_cnt.follower}"></a>
+        <a class="follow_cnt" th:href="${'/follow/followed/'+another.userid}" th:text="${'팔로우 '+follow_cnt.followed}"></a>
+    </div>
     <button class="follow" id="follow" th:if="${!isFollow}">팔로우</button>
     <button id="follow" class="follow contrast" th:if="${isFollow}">팔로우 취소</button>
     <div class="menu" role="group" th:name="${another.userid}">
