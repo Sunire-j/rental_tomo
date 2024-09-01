@@ -253,6 +253,7 @@ public class HomeController {
         model.addAttribute("target", target);
         model.addAttribute("follower",follower);
         model.addAttribute("title", "팔로워");
+        model.addAttribute("isEr", true);
 
         return "user/follower.th.html";
     }
@@ -276,6 +277,7 @@ public class HomeController {
         model.addAttribute("target", target);
         model.addAttribute("follower",followed);
         model.addAttribute("title", "팔로우");
+        model.addAttribute("isEr", false);
 
         return "user/follower.th.html";
     }

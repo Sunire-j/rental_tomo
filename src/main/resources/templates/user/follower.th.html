@@ -36,9 +36,13 @@
     </div>
 
     <div>
-        <div th:each="follower_:${follower}" class="each-follow">
+        <div th:if="${isEr}" th:each="follower_:${follower}" class="each-follow">
             <img class="follow-pic" src="/image/temp.png"/>
             <a th:href="'/info/'+${follower_.follower.userid}" th:text="${follower_.follower.nickname}"></a>
+        </div>
+        <div th:if="${!isEr}" th:each="follower_:${follower}" class="each-follow">
+            <img class="follow-pic" src="/image/temp.png"/>
+            <a th:href="'/info/'+${follower_.followed.userid}" th:text="${follower_.followed.nickname}"></a>
         </div>
     </div>
 
