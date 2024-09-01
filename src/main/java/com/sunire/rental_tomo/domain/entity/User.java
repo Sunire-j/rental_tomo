@@ -46,9 +46,6 @@ public class User {
     @Column(name = "SNS", length = 45)
     private String sns;
 
-    @Column(name = "profilesrc", length = 255)
-    private String profilesrc;
-
     @Column(name = "email", length = 100)
     private String email;
 
@@ -74,6 +71,9 @@ public class User {
 
     @OneToMany(mappedBy = "followed")
     private Set<Follow> followed = new LinkedHashSet<>();
+
+    @Column(name = "gravatar_url", nullable = false, length = 120)
+    private String gravatarUrl;
 
     public enum Sex {
         M, F

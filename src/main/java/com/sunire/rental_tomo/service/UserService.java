@@ -8,6 +8,7 @@ import com.sunire.rental_tomo.exception.AppException;
 import com.sunire.rental_tomo.exception.ErrorCode;
 import com.sunire.rental_tomo.repository.UserRepository;
 import com.sunire.rental_tomo.utils.CookieUtil;
+import com.sunire.rental_tomo.utils.Gravatar_HashUtil;
 import com.sunire.rental_tomo.utils.JwtTokenUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -52,6 +53,9 @@ public class UserService {
 
         //birth는 달력으로 입력받기
 
+        String hash = Gravatar_HashUtil.sha256Hex(userJoinRequest.getEmail().toLowerCase());
+        String url = "https://gravatar.com/avatar/"+hash+"?s=200&d=retro&r=pg";
+
 
 
         User user = User.builder()
@@ -62,6 +66,7 @@ public class UserService {
                 .sex(userJoinRequest.getSex())
                 .birth(userJoinRequest.getBirth())
                 .email(userJoinRequest.getEmail())
+                .gravatarUrl(url)
                                         .build();
 
         userRepository.save(user);
@@ -155,11 +160,15 @@ public class UserService {
                     });
         }
 
+        String hash = Gravatar_HashUtil.sha256Hex(userInfoEditRequest.getEmail().toLowerCase());
+        String url = "https://gravatar.com/avatar/"+hash+"?s=200&d=retro&r=pg";
+
 
         user.setNickname(userInfoEditRequest.getNickname());
         user.setEmail(userInfoEditRequest.getEmail());
         user.setSns(userInfoEditRequest.getSns());
         user.setIntroduce(userInfoEditRequest.getIntroduce());
+        user.setGravatarUrl(url);
 
         userRepository.save(user);
     }
@@ -176,7 +185,6 @@ public class UserService {
         user.setSns(null);
         user.setNickname("탈퇴한 회원");
         user.setUserid(String.valueOf(user.getId()));
-        user.setProfilesrc(null);
         user.setEmail("NOT EXIST");
         user.setPhonenum("NOT EXIST");
 

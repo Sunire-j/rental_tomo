@@ -25,4 +25,10 @@ public class Category {
     @JoinColumn(name = "parent_id")
     private Category parent;
 
+    @OneToMany(mappedBy = "parent")
+    private Set<Category> categories = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "category")
+    private Set<SellerItem> sellerItems = new LinkedHashSet<>();
+
 }

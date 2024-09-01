@@ -21,11 +21,11 @@ create table user
     sex           enum ('M', 'F')      not null,
     birth         date                 not null,
     SNS           varchar(45)          null,
-    profilesrc    varchar(255)         null,
     email         varchar(100)         not null,
     suspend_until date                 null,
     is_seller     tinyint(1) default 0 not null,
     introduce     text                 null,
+    gravatar_url  varchar(120)         not null,
     constraint idx_userid
         unique (userid)
 );
